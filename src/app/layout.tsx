@@ -1,0 +1,27 @@
+import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
+import "./globals.css";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+});
+
+export const metadata: Metadata = {
+  title: "MisiMinda — Matematik Seronok Untuk Kanak-Kanak",
+  description:
+    "Platform pembelajaran matematik yang seru dan interaktif untuk kanak-kanak Malaysia.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="ms">
+      <body className={`${spaceGrotesk.variable} antialiased`}>{children}</body>
+    </html>
+  );
+}
