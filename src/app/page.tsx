@@ -1,65 +1,133 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Button, Card, Badge } from "@/components/ui";
+import { AGE_GROUPS } from "@/lib/constants";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen bg-[#FFFDF2]">
+      {/* Navbar */}
+      <nav className="border-b-4 border-black bg-[#FFB800] sticky top-0 z-30">
+        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🧠</span>
+            <span className="font-black text-xl uppercase tracking-tight">MisiMinda</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link href="/auth">
+              <Button variant="secondary" size="sm">Log Masuk</Button>
+            </Link>
+            <Link href="/auth?tab=signup">
+              <Button variant="danger" size="sm">Daftar Percuma</Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="max-w-5xl mx-auto px-4 py-16 flex flex-col items-center text-center gap-6">
+        <Badge variant="mint" className="text-sm">🇲🇾 Silibus KSPK & KSSR</Badge>
+        <h1 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
+          Matematik<br />
+          <span className="text-[#FF6B6B]">Seronok</span> untuk<br />
+          Kanak-Kanak!
+        </h1>
+        <p className="text-lg font-semibold text-gray-700 max-w-xl">
+          MisiMinda mengajar matematik melalui cerita yang seru dan misi yang mencabar.
+          Sesuai untuk umur 5–12 tahun.
+        </p>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <Link href="/auth?tab=signup">
+            <Button variant="primary" size="xl">Mula Percuma 🚀</Button>
+          </Link>
+          <Link href="/auth">
+            <Button variant="secondary" size="xl">Log Masuk</Button>
+          </Link>
+        </div>
+
+        {/* Hero visual */}
+        <div className="grid grid-cols-3 gap-4 mt-8 w-full max-w-lg">
+          {["🎂", "🦁", "🤖"].map((emoji, i) => (
+            <Card
+              key={i}
+              color={i === 0 ? "red" : i === 1 ? "yellow" : "mint"}
+              className="flex flex-col items-center gap-2 py-8"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              <span className="text-5xl">{emoji}</span>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Age groups */}
+      <section className="max-w-5xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-black uppercase mb-8 text-center">
+          3 Peringkat Pembelajaran
+        </h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          {AGE_GROUPS.map((group, i) => {
+            const colors = ["yellow", "mint", "blue"] as const;
+            const themes = [
+              "Misi Kedai Kek Cef Cilik 🎂",
+              "Pasukan Penyelamat Haiwan Hutan 🦁",
+              "Detektif Bandaraya Futuristik 🤖",
+            ];
+            return (
+              <Card key={group.value} color={colors[i]} hoverable>
+                <div className="text-4xl mb-3">{group.emoji}</div>
+                <Badge variant="black" className="mb-2">{group.grade}</Badge>
+                <h3 className="text-xl font-black uppercase mb-1">{group.label}</h3>
+                <p className="font-semibold text-sm">{themes[i]}</p>
+              </Card>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="max-w-5xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-black uppercase mb-8 text-center">
+          Kenapa MisiMinda?
+        </h2>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {[
+            { icon: "⭐", title: "Sistem Bintang", desc: "Kanak-kanak kumpul bintang dan dapatkan hadiah nyata dari ibu bapa." },
+            { icon: "📖", title: "Pembelajaran Berasaskan Cerita", desc: "Setiap soalan ada cerita yang menarik — bukan hafal, tapi faham!" },
+            { icon: "👨‍👩‍👧", title: "Dashboard Ibu Bapa", desc: "Pantau kemajuan, tetapkan hadiah, dan uruskan hingga 4 profil kanak-kanak." },
+            { icon: "🇲🇾", title: "Silibus Malaysia", desc: "100% mengikut sukatan pelajaran KSPK dan KSSR semasa." },
+          ].map((feat) => (
+            <Card key={feat.title} color="white" hoverable className="flex gap-4">
+              <span className="text-4xl">{feat.icon}</span>
+              <div>
+                <h3 className="font-black text-lg uppercase">{feat.title}</h3>
+                <p className="font-medium text-gray-700 text-sm mt-1">{feat.desc}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Pricing CTA */}
+      <section className="max-w-5xl mx-auto px-4 py-12">
+        <Card color="yellow" className="flex flex-col items-center text-center gap-4 py-12">
+          <h2 className="text-4xl font-black uppercase">Mulakan Hari Ini!</h2>
+          <p className="font-semibold text-lg">Dari RM19.90/bulan sahaja. Tiada kontrak.</p>
+          <Link href="/auth?tab=signup">
+            <Button variant="secondary" size="xl">Cuba Sekarang 🎉</Button>
+          </Link>
+        </Card>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t-4 border-black bg-black text-white py-8">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 font-black text-lg uppercase">
+            <span>🧠</span> MisiMinda
+          </div>
+          <p className="text-sm font-medium text-gray-400">
+            © 2025 MisiMinda. Hak cipta terpelihara.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </footer>
     </div>
   );
 }
