@@ -29,10 +29,7 @@ create table if not exists public.kids (
   age_group text not null check (age_group in ('5-6', '7-9', '10-12')),
   avatar_url text not null default 'rocket',
   total_stars integer not null default 0,
-  created_at timestamptz not null default now(),
-  constraint max_kids_per_parent check (
-    (select count(*) from public.kids k where k.parent_id = parent_id) <= 4
-  )
+  created_at timestamptz not null default now()
 );
 
 -- Levels table
@@ -230,3 +227,20 @@ $$;
 create trigger on_progress_update_stars
   after insert or update of stars_earned on public.kid_progress
   for each row execute procedure public.update_kid_stars();
+
+-- Max 4 kids per parent
+create or replace function public.check_max_kids()
+returns trigger
+language plpgsql
+as $$
+begin
+  if (select count(*) from public.kids where parent_id = new.parent_id) >= 4 then
+    raise exception 'Maximum 4 kanak-kanak dibenarkan per akaun.';
+  end if;
+  return new;
+end;
+$$;
+
+create trigger enforce_max_kids
+  before insert on public.kids
+  for each row execute procedure public.check_max_kids();
