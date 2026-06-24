@@ -1,29 +1,17 @@
 export const SUBSCRIPTION_PLANS = {
-  monthly: {
-    id: "monthly",
-    name: "Bulanan",
-    price: 1990, // in sen (RM19.90)
-    displayPrice: "RM19.90",
-    period: "bulan",
+  lifetime: {
+    id: "lifetime",
+    name: "Seumur Hidup",
+    price: 2900, // in sen (RM29.00)
+    displayPrice: "RM29.00",
+    badge: "Bayar Sekali, Guna Selamanya",
     features: [
       "Akses semua 3 peringkat umur",
       "Sehingga 4 profil kanak-kanak",
       "Sistem Ganjaran Ibu Bapa",
       "Penjejak kemajuan terperinci",
-    ],
-  },
-  yearly: {
-    id: "yearly",
-    name: "Tahunan",
-    price: 14900, // in sen (RM149.00)
-    displayPrice: "RM149.00",
-    period: "tahun",
-    badge: "Jimat 38%",
-    features: [
-      "Semua ciri pelan Bulanan",
-      "2 bulan percuma",
-      "Sijil pencapaian digital",
-      "Sokongan keutamaan",
+      "Semua tahap & misi akan datang",
+      "Tiada bayaran bulanan",
     ],
   },
 } as const;

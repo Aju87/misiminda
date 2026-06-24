@@ -11,42 +11,42 @@ import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 export default function PricingPage() {
   const router = useRouter();
   const { user, parent } = useAuth();
-  const [loading, setLoading] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubscribe(planId: string) {
+  const plan = SUBSCRIPTION_PLANS.lifetime;
+  const isSubscribed = parent?.subscription_status === "active";
+
+  async function handleSubscribe() {
     if (!user) {
       router.push("/auth?tab=signup");
       return;
     }
 
-    setLoading(planId);
+    setLoading(true);
     setError("");
 
     try {
       const res = await fetch("/api/chip/create-purchase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId }),
+        body: JSON.stringify({ planId: "lifetime" }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.error ?? "Ralat berlaku. Cuba lagi.");
-        setLoading(null);
+        setLoading(false);
         return;
       }
 
-      // Redirect to CHIP checkout
       window.location.href = data.checkout_url;
     } catch {
       setError("Ralat sambungan. Sila cuba lagi.");
-      setLoading(null);
+      setLoading(false);
     }
   }
-
-  const isSubscribed = parent?.subscription_status === "active";
 
   return (
     <div className="min-h-screen bg-[#FFFDF2]">
@@ -69,147 +69,105 @@ export default function PricingPage() {
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-4 py-16 flex flex-col items-center gap-12">
+      <main className="max-w-3xl mx-auto px-4 py-16 flex flex-col items-center gap-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center flex flex-col gap-4"
         >
-          <Badge variant="mint">💳 Pelan Harga</Badge>
+          <Badge variant="mint">💳 Harga</Badge>
           <h1 className="text-5xl font-black uppercase leading-none">
-            Pilih Pelan Anda
+            Satu Harga.<br />Seumur Hidup.
           </h1>
           <p className="text-lg font-semibold text-gray-700 max-w-lg">
-            Akses penuh ke semua misi, peringkat, dan sistem ganjaran.
-            Tiada kontrak. Batalkan bila-bila masa.
+            Bayar sekali, akses selamanya. Tiada bayaran bulanan. Tiada kejutan.
           </p>
         </motion.div>
 
-        {/* Already subscribed banner */}
+        {/* Already subscribed */}
         {isSubscribed && (
-          <Card color="mint" className="w-full max-w-lg text-center">
-            <p className="font-black text-lg">✅ Anda sudah berlangganan!</p>
-            <p className="font-semibold text-sm mt-1">Langganan anda masih aktif.</p>
+          <Card color="mint" className="w-full text-center">
+            <p className="font-black text-lg">✅ Anda sudah mempunyai akses penuh!</p>
+            <p className="font-semibold text-sm mt-1">Akaun anda telah diaktifkan.</p>
             <Link href="/dashboard" className="mt-3 inline-block">
               <Button variant="secondary" size="sm">Pergi Dashboard</Button>
             </Link>
           </Card>
         )}
 
-        {/* Pricing cards */}
-        <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl">
-          {/* Monthly */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
+        {/* Main pricing card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="w-full"
+        >
+          <div
+            style={{ boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
+            className="border-4 border-black rounded-2xl bg-[#FFB800] p-8 relative"
           >
-            <Card color="white" className="flex flex-col gap-5 h-full">
-              <div>
-                <p className="font-black text-sm uppercase tracking-widest text-gray-500">
-                  {SUBSCRIPTION_PLANS.monthly.name}
-                </p>
-                <div className="flex items-end gap-1 mt-1">
-                  <span className="text-5xl font-black">
-                    {SUBSCRIPTION_PLANS.monthly.displayPrice}
-                  </span>
-                  <span className="text-gray-500 font-bold mb-2">
-                    /{SUBSCRIPTION_PLANS.monthly.period}
-                  </span>
-                </div>
-              </div>
-
-              <ul className="flex flex-col gap-2 flex-1">
-                {SUBSCRIPTION_PLANS.monthly.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 font-semibold text-sm">
-                    <span className="text-[#4ECDC4] font-black mt-0.5">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                fullWidth
-                size="lg"
-                variant="secondary"
-                loading={loading === "monthly"}
-                disabled={isSubscribed || loading !== null}
-                onClick={() => handleSubscribe("monthly")}
-              >
-                {isSubscribed ? "Sudah Aktif" : "Langgan Bulanan"}
-              </Button>
-            </Card>
-          </motion.div>
-
-          {/* Yearly — highlighted */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div
-              style={{ boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
-              className="border-4 border-black rounded-2xl bg-[#FFB800] flex flex-col gap-5 p-5 h-full relative"
-            >
-              {/* Best value badge */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <Badge variant="black" className="text-sm px-4 py-1">
-                  ⭐ {SUBSCRIPTION_PLANS.yearly.badge}
-                </Badge>
-              </div>
-
-              <div className="pt-2">
-                <p className="font-black text-sm uppercase tracking-widest">
-                  {SUBSCRIPTION_PLANS.yearly.name}
-                </p>
-                <div className="flex items-end gap-1 mt-1">
-                  <span className="text-5xl font-black">
-                    {SUBSCRIPTION_PLANS.yearly.displayPrice}
-                  </span>
-                  <span className="font-bold mb-2">/{SUBSCRIPTION_PLANS.yearly.period}</span>
-                </div>
-                <p className="text-sm font-bold text-black/70 mt-1">
-                  Bersamaan RM12.42/bulan
-                </p>
-              </div>
-
-              <ul className="flex flex-col gap-2 flex-1">
-                {SUBSCRIPTION_PLANS.yearly.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 font-semibold text-sm">
-                    <span className="font-black mt-0.5">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                fullWidth
-                size="lg"
-                variant="danger"
-                loading={loading === "yearly"}
-                disabled={isSubscribed || loading !== null}
-                onClick={() => handleSubscribe("yearly")}
-              >
-                {isSubscribed ? "Sudah Aktif" : "Langgan Tahunan 🚀"}
-              </Button>
+            {/* Badge */}
+            <div className="absolute -top-4 left-8">
+              <Badge variant="black" className="text-sm px-4 py-1.5">
+                🔥 {plan.badge}
+              </Badge>
             </div>
-          </motion.div>
-        </div>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-2">
+              {/* Price */}
+              <div>
+                <p className="font-black text-sm uppercase tracking-widest mb-1">
+                  {plan.name}
+                </p>
+                <div className="flex items-end gap-2">
+                  <span className="text-7xl font-black leading-none">
+                    {plan.displayPrice}
+                  </span>
+                </div>
+                <p className="font-bold text-sm mt-1">Bayaran sekali sahaja</p>
+              </div>
+
+              {/* CTA */}
+              <div className="w-full sm:w-auto">
+                <Button
+                  size="xl"
+                  variant="secondary"
+                  fullWidth
+                  loading={loading}
+                  disabled={isSubscribed}
+                  onClick={handleSubscribe}
+                >
+                  {isSubscribed ? "✅ Dah Aktif" : "Beli Sekarang 🚀"}
+                </Button>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="grid sm:grid-cols-2 gap-3 mt-8 pt-6 border-t-4 border-black">
+              {plan.features.map((f) => (
+                <div key={f} className="flex items-center gap-2">
+                  <span className="w-6 h-6 bg-black text-white rounded-md flex items-center justify-center text-xs font-black shrink-0">✓</span>
+                  <span className="font-bold text-sm">{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
 
         {error && (
-          <Card color="red" className="w-full max-w-lg text-center">
+          <Card color="red" className="w-full text-center">
             <p className="font-bold">{error}</p>
           </Card>
         )}
 
         {/* Trust badges */}
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-3">
           {[
             "🔒 Pembayaran Selamat via CHIP",
             "💳 FPX & Kad Kredit/Debit",
-            "❌ Tiada Kontrak",
             "🇲🇾 Ringgit Malaysia (MYR)",
+            "♾️ Akses Seumur Hidup",
           ].map((item) => (
             <div
               key={item}
@@ -221,24 +179,24 @@ export default function PricingPage() {
         </div>
 
         {/* FAQ */}
-        <div className="w-full max-w-2xl flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4">
           <h2 className="text-2xl font-black uppercase text-center">Soalan Lazim</h2>
           {[
             {
-              q: "Boleh batalkan langganan bila-bila masa?",
-              a: "Ya. Tiada kontrak atau penalti. Batalkan dari dashboard anda.",
+              q: "Berapa lama akses ini?",
+              a: "Seumur hidup — bayar sekali, guna selama-lamanya termasuk semua kemaskini akan datang.",
             },
             {
-              q: "Berapa ramai kanak-kanak boleh guna satu akaun?",
+              q: "Berapa ramai kanak-kanak boleh guna?",
               a: "Sehingga 4 profil kanak-kanak dalam satu akaun ibu bapa.",
             },
             {
-              q: "Adakah ada percubaan percuma?",
-              a: "Kami menawarkan 7 hari percubaan percuma untuk pengguna baru.",
+              q: "Kaedah pembayaran apa diterima?",
+              a: "FPX (semua bank Malaysia), Kad Kredit, dan Kad Debit melalui CHIP.",
             },
             {
-              q: "Kaedah pembayaran apa yang diterima?",
-              a: "FPX (semua bank Malaysia), Kad Kredit, dan Kad Debit melalui CHIP.",
+              q: "Boleh dapat refund?",
+              a: "Kami menawarkan jaminan wang kembali dalam tempoh 7 hari jika tidak berpuas hati.",
             },
           ].map((faq) => (
             <Card key={faq.q} color="white" className="flex flex-col gap-2">
