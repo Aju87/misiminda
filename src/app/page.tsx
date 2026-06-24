@@ -110,7 +110,7 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-4 py-12">
         <Card color="yellow" className="flex flex-col items-center text-center gap-4 py-12">
           <h2 className="text-4xl font-black uppercase">Mulakan Hari Ini!</h2>
-          <p className="font-semibold text-lg">Dari RM19.90/bulan sahaja. Tiada kontrak.</p>
+          <p className="font-semibold text-lg">Hanya RM29 — bayar sekali, akses seumur hidup! 🎉</p>
           <Link href="/auth?tab=signup">
             <Button variant="secondary" size="xl">Cuba Sekarang 🎉</Button>
           </Link>
