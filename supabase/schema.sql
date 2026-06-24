@@ -56,6 +56,7 @@ create table if not exists public.questions (
   correct_answer jsonb not null, -- string or number
   success_message text not null default 'Hebat! Jawapan betul!',
   order_index integer not null default 0,
+  unique(level_id, order_index),
   created_at timestamptz not null default now()
 );
 
