@@ -11,7 +11,9 @@ interface ResultScreenProps {
   correct: number;
   total: number;
   starsEarned: number;
+  nextLevel?: Level;
   onPlayAgain: () => void;
+  onNextLevel?: () => void;
   onBackToMap: () => void;
 }
 
@@ -58,7 +60,9 @@ export function ResultScreen({
   correct,
   total,
   starsEarned,
+  nextLevel,
   onPlayAgain,
+  onNextLevel,
   onBackToMap,
 }: ResultScreenProps) {
   const isPerfect = correct === total;
@@ -142,7 +146,12 @@ export function ResultScreen({
             transition={{ delay: 0.4 }}
             className="flex flex-col gap-3"
           >
-            {percentage < 100 && (
+            {percentage >= 70 && nextLevel && onNextLevel && (
+              <Button fullWidth size="lg" variant="mint" onClick={onNextLevel}>
+                Level {nextLevel.level_number} Seterusnya ➡️
+              </Button>
+            )}
+            {percentage < 70 && (
               <Button fullWidth size="lg" variant="primary" onClick={onPlayAgain}>
                 Cuba Semula 🔄
               </Button>

@@ -119,9 +119,20 @@ function PlayContent() {
     setScreen("level-map");
   }
 
+  async function handleNextLevel() {
+    if (!selectedLevel) return;
+    const currentIdx = levels.findIndex((l) => l.id === selectedLevel.id);
+    const next = levels[currentIdx + 1];
+    if (!next) return;
+    await handleSelectLevel(next);
+  }
+
   // Calculate stars for result
   const pct = questions.length > 0 ? correctCount / questions.length : 0;
   const starsEarned = pct === 1 ? 10 : pct >= 0.7 ? 7 : pct >= 0.5 ? 5 : 3;
+  const nextLevel = selectedLevel
+    ? levels[levels.findIndex((l) => l.id === selectedLevel.id) + 1]
+    : undefined;
 
   if (loadingKids) {
     return (
@@ -249,7 +260,9 @@ function PlayContent() {
             correct={correctCount}
             total={questions.length}
             starsEarned={starsEarned}
+            nextLevel={nextLevel}
             onPlayAgain={handlePlayAgain}
+            onNextLevel={handleNextLevel}
             onBackToMap={handleBackToMap}
           />
         </motion.div>

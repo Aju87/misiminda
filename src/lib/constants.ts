@@ -34,7 +34,16 @@ export const AGE_GROUPS = [
 ] as const;
 
 export const LEVEL_THEMES: Record<string, { color: string; bg: string }> = {
+  // Age 5-6
   "Misi Kedai Kek Cef Cilik": { color: "#FF6B6B", bg: "#FFE8E8" },
+  "Taman Bunga Ajaib": { color: "#F9A826", bg: "#FFF5E1" },
+  "Ladang Haiwan Gembira": { color: "#FF9F43", bg: "#FFF0E0" },
+  // Age 7-9
   "Pasukan Penyelamat Haiwan Hutan": { color: "#4ECDC4", bg: "#E8FAF9" },
+  "Pasar Tani Misteri": { color: "#26D182", bg: "#E0FFF0" },
+  "Ekspedisi Angkasa": { color: "#9B59B6", bg: "#F3E8FF" },
+  // Age 10-12
   "Detektif Bandaraya Futuristik": { color: "#45B7D1", bg: "#E8F6FB" },
+  "Misi Bawah Laut": { color: "#1E90FF", bg: "#E0F0FF" },
+  "Penjelajah Hutan Amazon": { color: "#27AE60", bg: "#E0F5E9" },
 };

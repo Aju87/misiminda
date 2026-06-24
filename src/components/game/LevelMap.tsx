@@ -54,7 +54,10 @@ export function LevelMap({ kid, levels, getProgress, onSelectLevel, onBack }: Le
             const isCompleted = prog?.completed ?? false;
             const starsEarned = prog?.stars_earned ?? 0;
             const theme = LEVEL_THEMES[level.theme] ?? { color: "#FFB800", bg: "#FFF8E1" };
-            const isLocked = false; // All levels unlocked for now
+            // Lock level if previous level not completed
+            const prevLevel = i > 0 ? levels[i - 1] : null;
+            const prevProgress = prevLevel ? getProgress(prevLevel.id) : null;
+            const isLocked = i > 0 && !prevProgress?.completed;
 
             return (
               <motion.div
