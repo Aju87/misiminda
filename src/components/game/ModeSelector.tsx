@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { Logo } from "@/components/ui";
 import type { Kid, QuizMode } from "@/types";
 
 interface ModeSelectorProps {
@@ -44,7 +46,9 @@ export function ModeSelector({ kid, onSelect, onBack }: ModeSelectorProps) {
             <p className="font-black text-lg uppercase">{kid.name}</p>
             <p className="text-xs font-bold opacity-70">Pilih mod pembelajaran</p>
           </div>
-          <div className="ml-auto text-3xl">{kid.avatar_url}</div>
+          <Link href="/" className="ml-auto">
+            <Logo size={40} />
+          </Link>
         </div>
       </div>
 
