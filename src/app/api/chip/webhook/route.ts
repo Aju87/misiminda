@@ -43,9 +43,10 @@ export async function POST(req: Request) {
 
     // 2. Fallback: cari user ikut email (payment link statik CHIP)
     if (clientEmail) {
-      const { data: authUser } = await supabase.auth.admin.getUserByEmail(clientEmail);
-      if (authUser?.user?.id) {
-        await activateSubscription(supabase, authUser.user.id, purchaseId);
+      const { data: listData } = await supabase.auth.admin.listUsers();
+      const foundUser = listData?.users?.find((u) => u.email === clientEmail);
+      if (foundUser?.id) {
+        await activateSubscription(supabase, foundUser.id, purchaseId);
         return NextResponse.json({ received: true });
       }
     }
