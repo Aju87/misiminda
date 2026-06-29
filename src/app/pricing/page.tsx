@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -11,41 +10,18 @@ import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 export default function PricingPage() {
   const router = useRouter();
   const { user, parent } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const plan = SUBSCRIPTION_PLANS.lifetime;
   const isSubscribed = parent?.subscription_status === "active";
 
-  async function handleSubscribe() {
+  const CHIP_PAYMENT_URL = "https://pay.chip-in.asia/misiminda";
+
+  function handleSubscribe() {
     if (!user) {
       router.push("/auth?tab=signup");
       return;
     }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/chip/create-purchase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId: "lifetime" }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error ?? "Ralat berlaku. Cuba lagi.");
-        setLoading(false);
-        return;
-      }
-
-      window.location.href = data.checkout_url;
-    } catch {
-      setError("Ralat sambungan. Sila cuba lagi.");
-      setLoading(false);
-    }
+    window.location.href = CHIP_PAYMENT_URL;
   }
 
   return (
@@ -133,7 +109,6 @@ export default function PricingPage() {
                   size="xl"
                   variant="secondary"
                   fullWidth
-                  loading={loading}
                   disabled={isSubscribed}
                   onClick={handleSubscribe}
                 >
@@ -153,12 +128,6 @@ export default function PricingPage() {
             </div>
           </div>
         </motion.div>
-
-        {error && (
-          <Card color="red" className="w-full text-center">
-            <p className="font-bold">{error}</p>
-          </Card>
-        )}
 
         {/* Trust badges */}
         <div className="flex flex-wrap justify-center gap-3">
