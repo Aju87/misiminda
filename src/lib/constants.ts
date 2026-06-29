@@ -34,16 +34,28 @@ export const AGE_GROUPS = [
 ] as const;
 
 export const LEVEL_THEMES: Record<string, { color: string; bg: string }> = {
-  // Age 5-6
-  "Misi Kedai Kek Cef Cilik": { color: "#FF6B6B", bg: "#FFE8E8" },
-  "Taman Bunga Ajaib": { color: "#F9A826", bg: "#FFF5E1" },
-  "Ladang Haiwan Gembira": { color: "#FF9F43", bg: "#FFF0E0" },
-  // Age 7-9
-  "Pasukan Penyelamat Haiwan Hutan": { color: "#4ECDC4", bg: "#E8FAF9" },
-  "Pasar Tani Misteri": { color: "#26D182", bg: "#E0FFF0" },
-  "Ekspedisi Angkasa": { color: "#9B59B6", bg: "#F3E8FF" },
-  // Age 10-12
-  "Detektif Bandaraya Futuristik": { color: "#45B7D1", bg: "#E8F6FB" },
-  "Misi Bawah Laut": { color: "#1E90FF", bg: "#E0F0FF" },
-  "Penjelajah Hutan Amazon": { color: "#27AE60", bg: "#E0F5E9" },
+  // BoBoiBoy (kuning/oren)
+  "BoBoiBoy: Selamatkan Ochobot!": { color: "#FFB800", bg: "#FFF8E1" },
+  "BoBoiBoy Galaxy: Perang Angkasa!": { color: "#FF8C00", bg: "#FFF3E0" },
+  "BoBoiBoy: Kuasa Elemen!": { color: "#F9A826", bg: "#FFF5E0" },
+  // Ejen Ali (merah/biru)
+  "Ejen Ali: Tangkap Pencuri!": { color: "#FF4757", bg: "#FFE8EA" },
+  "Ejen Ali: Operasi Rahsia!": { color: "#E84393", bg: "#FFE0F2" },
+  "Ejen Ali: Misi Mustahil!": { color: "#C0392B", bg: "#FDECEA" },
+  // Upin & Ipin (hijau/oren)
+  "Upin & Ipin: Hari Raya Gembira!": { color: "#27AE60", bg: "#E0F5E9" },
+  "Upin & Ipin: Musim Periksa!": { color: "#16A085", bg: "#E0F5F1" },
+  "Upin & Ipin: Juara Sekolah!": { color: "#1ABC9C", bg: "#E0FAF4" },
+  // Latihan themes (sebelum)
+  "Tambah dalam 10": { color: "#FF6B6B", bg: "#FFE8E8" },
+  "Tolak dalam 10": { color: "#F9A826", bg: "#FFF5E1" },
+  "Tambah & Tolak dalam 100": { color: "#4ECDC4", bg: "#E8FAF9" },
+  "Sifir Darab 2, 3, 4, 5": { color: "#FFB800", bg: "#FFF8E1" },
+  "Bahagi dengan 2, 3, 4, 5": { color: "#26D182", bg: "#E0FFF0" },
+  "Tambah & Tolak Nombor Besar": { color: "#45B7D1", bg: "#E8F6FB" },
+  "Sifir Darab 6, 7, 8, 9": { color: "#9B59B6", bg: "#F3E8FF" },
+  "Sifir Darab 10, 11, 12": { color: "#1E90FF", bg: "#E0F0FF" },
+  "Bahagi Nombor Besar": { color: "#27AE60", bg: "#E0F5E9" },
+  "Pecahan Asas": { color: "#E84393", bg: "#FFE0F2" },
+  "Wang & Harga": { color: "#FF8C00", bg: "#FFF3E0" },
 };

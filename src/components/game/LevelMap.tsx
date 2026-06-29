@@ -89,17 +89,17 @@ export function LevelMap({ kid, levels, getProgress, onSelectLevel, onBack }: Le
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      {/* Level number bubble */}
+                      {/* Icon / status bubble */}
                       <div
                         style={{ backgroundColor: theme.color }}
-                        className="w-14 h-14 border-3 border-black rounded-2xl flex items-center justify-center font-black text-2xl shrink-0"
+                        className="w-16 h-16 border-3 border-black rounded-2xl flex items-center justify-center text-3xl shrink-0"
                       >
-                        {isCompleted ? "✅" : isLocked ? "🔒" : `${level.level_number}`}
+                        {isCompleted ? "✅" : isLocked ? "🔒" : (level.icon ?? `${level.level_number}`)}
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <Badge variant="black" className="text-xs">
-                            Tahap {level.level_number}
+                            Misi {level.level_number}
                           </Badge>
                           {isCompleted && <Badge variant="mint">Selesai!</Badge>}
                         </div>

@@ -61,12 +61,12 @@ function PlayContent() {
       const kidsList = kidsData ?? [];
       setKids(kidsList);
 
-      // If kid param passed, auto-select
+      // If kid param passed, auto-select → still go to mode selector
       if (kidParam && kidsList.length > 0) {
         const kid = kidsList.find((k) => k.id === kidParam);
         if (kid) {
           setSelectedKid(kid);
-          setScreen("level-map");
+          setScreen("select-mode");
         }
       }
       setLoadingKids(false);

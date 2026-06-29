@@ -32,6 +32,7 @@ export interface Level {
   description?: string;
   quiz_mode: QuizMode;
   category?: DrillCategory;
+  icon?: string;
 }
 
 export type QuestionOption = string | number;
