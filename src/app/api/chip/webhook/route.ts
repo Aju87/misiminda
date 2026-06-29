@@ -21,18 +21,12 @@ export async function POST(req: Request) {
 
     const event = JSON.parse(body);
 
-    // CHIP hantar type: "purchase" dengan status dalam payload
+    // CHIP hantar type: "purchase" — mana-mana webhook dari CHIP = paid
     const eventType: string = event.type ?? event.event ?? "";
-    const eventStatus: string = event.status ?? "";
-    console.log("CHIP event type:", eventType, "status:", eventStatus);
+    console.log("CHIP event type:", eventType);
 
-    // Terima jika type=purchase (paid) atau event=purchase.paid
-    const isPaid =
-      eventType === "purchase.paid" ||
-      (eventType === "purchase" && eventStatus === "paid");
-
-    if (!isPaid) {
-      console.log("Bukan pembayaran selesai, skip.");
+    if (!eventType.includes("purchase")) {
+      console.log("Bukan purchase event, skip:", eventType);
       return NextResponse.json({ received: true });
     }
 
@@ -60,14 +54,17 @@ export async function POST(req: Request) {
 
     // 2. Fallback: cari parent terus ikut email dalam jadual parents
     if (clientEmail) {
-      const { data: parentByEmail } = await supabase
+      const { data: parentByEmail, error: emailErr } = await supabase
         .from("parents")
         .select("id")
         .eq("email", clientEmail)
         .maybeSingle();
 
+      console.log("Parent by email result:", parentByEmail, "error:", emailErr);
+
       if (parentByEmail?.id) {
         await activateSubscription(supabase, parentByEmail.id, purchaseId);
+        console.log("Subscription activated for:", parentByEmail.id);
         return NextResponse.json({ received: true });
       }
     }
