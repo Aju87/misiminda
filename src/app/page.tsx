@@ -44,16 +44,8 @@ export default function HomePage() {
         </div>
 
         {/* Hero visual */}
-        <div className="grid grid-cols-3 gap-4 mt-8 w-full max-w-lg">
-          {["🎂", "🦁", "🤖"].map((emoji, i) => (
-            <Card
-              key={i}
-              color={i === 0 ? "red" : i === 1 ? "yellow" : "mint"}
-              className="flex flex-col items-center gap-2 py-8"
-            >
-              <span className="text-5xl">{emoji}</span>
-            </Card>
-          ))}
+        <div className="mt-8">
+          <Logo size={180} />
         </div>
       </section>
 
