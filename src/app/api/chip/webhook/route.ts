@@ -41,12 +41,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ received: true });
     }
 
-    // 2. Fallback: cari user ikut email (payment link statik CHIP)
+    // 2. Fallback: cari parent terus ikut email dalam jadual parents
     if (clientEmail) {
-      const { data: listData } = await supabase.auth.admin.listUsers();
-      const foundUser = listData?.users?.find((u) => u.email === clientEmail);
-      if (foundUser?.id) {
-        await activateSubscription(supabase, foundUser.id, purchaseId);
+      const { data: parentByEmail } = await supabase
+        .from("parents")
+        .select("id")
+        .eq("email", clientEmail)
+        .maybeSingle();
+
+      if (parentByEmail?.id) {
+        await activateSubscription(supabase, parentByEmail.id, purchaseId);
         return NextResponse.json({ received: true });
       }
     }
