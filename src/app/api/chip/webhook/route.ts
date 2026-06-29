@@ -82,19 +82,21 @@ async function activateSubscription(
   parentId: string,
   chipPurchaseId: string
 ) {
-  await supabase
+  const { error: updateErr } = await supabase
     .from("parents")
     .update({ subscription_status: "active" })
     .eq("id", parentId);
 
-  // Rekod payment jika belum ada
-  await supabase.from("payments").upsert({
+  console.log("Update parents result - error:", updateErr);
+
+  const { error: upsertErr } = await supabase.from("payments").upsert({
     parent_id: parentId,
     chip_purchase_id: chipPurchaseId,
-    plan_id: "lifetime",
+    plan: "lifetime",
     amount: 2900,
-    currency: "MYR",
     status: "paid",
     paid_at: new Date().toISOString(),
-  }, { onConflict: "chip_purchase_id", ignoreDuplicates: false });
+  }, { onConflict: "chip_purchase_id" });
+
+  console.log("Upsert payments result - error:", upsertErr);
 }
