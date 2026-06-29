@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
-import { Button, Card, Badge } from "@/components/ui";
+import { Button, Card, Badge, Logo } from "@/components/ui";
 import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 
 export default function PricingPage() {
@@ -53,9 +53,8 @@ export default function PricingPage() {
       {/* Navbar */}
       <nav className="border-b-4 border-black bg-[#FFB800] sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🧠</span>
-            <span className="font-black text-xl uppercase">MisiMinda</span>
+          <Link href="/" className="flex items-center">
+            <Logo size={48} />
           </Link>
           {user ? (
             <Link href="/dashboard">

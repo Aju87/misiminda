@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
-import { Button, Card, Input, Badge } from "@/components/ui";
+import { Button, Card, Input, Badge, Logo } from "@/components/ui";
 
 type Tab = "login" | "signup";
 
@@ -65,9 +65,8 @@ function AuthForm() {
       {/* Navbar */}
       <nav className="border-b-4 border-black bg-[#FFB800]">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🧠</span>
-            <span className="font-black text-xl uppercase">MisiMinda</span>
+          <Link href="/" className="flex items-center">
+            <Logo size={48} />
           </Link>
         </div>
       </nav>

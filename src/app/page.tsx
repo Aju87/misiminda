@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, Card, Badge } from "@/components/ui";
+import { Button, Card, Badge, Logo } from "@/components/ui";
 import { AGE_GROUPS } from "@/lib/constants";
 
 export default function HomePage() {
@@ -9,8 +9,7 @@ export default function HomePage() {
       <nav className="border-b-4 border-black bg-[#FFB800] sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🧠</span>
-            <span className="font-black text-xl uppercase tracking-tight">MisiMinda</span>
+            <Logo size={44} />
           </div>
           <div className="flex items-center gap-3">
             <Link href="/auth">
@@ -120,8 +119,8 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t-4 border-black bg-black text-white py-8">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-black text-lg uppercase">
-            <span>🧠</span> MisiMinda
+          <div className="flex items-center gap-2">
+            <Logo size={40} />
           </div>
           <p className="text-sm font-medium text-gray-400">
             © 2025 MisiMinda. Hak cipta terpelihara.

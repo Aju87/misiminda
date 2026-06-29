@@ -14,7 +14,7 @@ import { KidCard } from "@/components/dashboard/KidCard";
 import { AddKidModal } from "@/components/dashboard/AddKidModal";
 import { RewardCard } from "@/components/dashboard/RewardCard";
 import { AddRewardModal } from "@/components/dashboard/AddRewardModal";
-import { Button, Card, Badge } from "@/components/ui";
+import { Button, Card, Badge, Logo } from "@/components/ui";
 import type { Kid } from "@/types";
 
 type Tab = "kids" | "rewards" | "subscription";
@@ -65,9 +65,8 @@ export default function DashboardPage() {
       {/* Navbar */}
       <nav className="border-b-4 border-black bg-[#FFB800] sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🧠</span>
-            <span className="font-black text-xl uppercase">MisiMinda</span>
+          <Link href="/" className="flex items-center">
+            <Logo size={48} />
           </Link>
           <div className="flex items-center gap-3">
             <span className="font-bold text-sm hidden sm:block">Hai, {parent.name}!</span>

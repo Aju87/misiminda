@@ -6,3 +6,4 @@ export { Badge } from "./Badge";
 export { Modal } from "./Modal";
 export { AvatarDisplay, AvatarPicker } from "./Avatar";
 export { StarCounter } from "./StarCounter";
+export { Logo } from "./Logo";
