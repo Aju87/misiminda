@@ -21,12 +21,17 @@ export interface Kid {
   created_at: string;
 }
 
+export type QuizMode = "misi" | "latihan";
+export type DrillCategory = "tambah-tolak" | "sifir" | "bahagi" | "pecahan" | "wang";
+
 export interface Level {
   id: string;
   age_group: AgeGroup;
   theme: string;
   level_number: number;
   description?: string;
+  quiz_mode: QuizMode;
+  category?: DrillCategory;
 }
 
 export type QuestionOption = string | number;

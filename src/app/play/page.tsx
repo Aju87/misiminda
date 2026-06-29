@@ -6,22 +6,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import { useGameData } from "@/hooks/useGameData";
 import { KidSelector } from "@/components/game/KidSelector";
+import { ModeSelector } from "@/components/game/ModeSelector";
 import { LevelMap } from "@/components/game/LevelMap";
+import { CategorySelector } from "@/components/game/CategorySelector";
 import { QuizCard } from "@/components/game/QuizCard";
 import { ResultScreen } from "@/components/game/ResultScreen";
-import type { Kid, Level, Question, QuestionOption } from "@/types";
+import type { Kid, Level, Question, QuestionOption, QuizMode } from "@/types";
 
-type Screen = "select-kid" | "level-map" | "quiz" | "result";
+type Screen = "select-kid" | "select-mode" | "level-map" | "category" | "quiz" | "result";
 
 function PlayContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const kidParam = searchParams.get("kid");
 
-  const [screen, setScreen] = useState<Screen>(kidParam ? "level-map" : "select-kid");
+  const [screen, setScreen] = useState<Screen>(kidParam ? "select-mode" : "select-kid");
   const [kids, setKids] = useState<Kid[]>([]);
   const [selectedKid, setSelectedKid] = useState<Kid | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
+  const [quizMode, setQuizMode] = useState<QuizMode>("misi");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -30,7 +33,7 @@ function PlayContent() {
   const supabase = createClient();
 
   const { levels, loading: levelsLoading, fetchQuestions, saveProgress, getProgress } =
-    useGameData(selectedKid?.id, selectedKid?.age_group);
+    useGameData(selectedKid?.id, selectedKid?.age_group, quizMode);
 
   // Load kids on mount
   useEffect(() => {
@@ -74,7 +77,12 @@ function PlayContent() {
 
   function handleSelectKid(kid: Kid) {
     setSelectedKid(kid);
-    setScreen("level-map");
+    setScreen("select-mode");
+  }
+
+  function handleSelectMode(mode: QuizMode) {
+    setQuizMode(mode);
+    setScreen(mode === "misi" ? "level-map" : "category");
   }
 
   async function handleSelectLevel(level: Level) {
@@ -116,7 +124,7 @@ function PlayContent() {
     setCurrentIndex(0);
     setCorrectCount(0);
     setSelectedLevel(null);
-    setScreen("level-map");
+    setScreen(quizMode === "misi" ? "level-map" : "category");
   }
 
   async function handleNextLevel() {
@@ -177,6 +185,34 @@ function PlayContent() {
         </motion.div>
       )}
 
+      {screen === "select-mode" && selectedKid && (
+        <motion.div key="select-mode" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <ModeSelector
+            kid={selectedKid}
+            onSelect={handleSelectMode}
+            onBack={() => setScreen("select-kid")}
+          />
+        </motion.div>
+      )}
+
+      {screen === "category" && selectedKid && (
+        <motion.div key="category" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          {levelsLoading ? (
+            <div className="min-h-screen bg-[#FFFDF2] flex items-center justify-center">
+              <div className="text-4xl animate-pulse">⚡</div>
+            </div>
+          ) : (
+            <CategorySelector
+              kid={selectedKid}
+              levels={levels}
+              getProgress={getProgress}
+              onSelectLevel={handleSelectLevel}
+              onBack={() => setScreen("select-mode")}
+            />
+          )}
+        </motion.div>
+      )}
+
       {screen === "level-map" && selectedKid && (
         <motion.div key="level-map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           {levelsLoading ? (
@@ -189,7 +225,7 @@ function PlayContent() {
               levels={levels}
               getProgress={getProgress}
               onSelectLevel={handleSelectLevel}
-              onBack={() => setScreen("select-kid")}
+              onBack={() => setScreen("select-mode")}
             />
           )}
         </motion.div>

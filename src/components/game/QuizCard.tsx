@@ -82,15 +82,17 @@ export function QuizCard({
         style={{ boxShadow: "6px 6px 0px 0px rgba(0,0,0,1)" }}
         className="border-4 border-black rounded-2xl bg-white overflow-hidden"
       >
-        {/* Story */}
-        <div className="bg-[#45B7D1] border-b-4 border-black px-5 py-4">
-          <p className="text-xs font-black uppercase tracking-widest mb-1 opacity-70">Cerita</p>
-          <p className="font-bold text-sm leading-relaxed">{question.story_text}</p>
-        </div>
+        {/* Story — hidden for drill mode */}
+        {question.story_text && (
+          <div className="bg-[#45B7D1] border-b-4 border-black px-5 py-4">
+            <p className="text-xs font-black uppercase tracking-widest mb-1 opacity-70">Cerita</p>
+            <p className="font-bold text-sm leading-relaxed">{question.story_text}</p>
+          </div>
+        )}
 
         {/* Question */}
         <div className="px-5 py-5">
-          <p className="font-black text-xl leading-snug">{question.question_text}</p>
+          <p className="font-black text-2xl leading-snug text-center">{question.question_text}</p>
         </div>
       </div>
 
