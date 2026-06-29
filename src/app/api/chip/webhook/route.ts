@@ -25,36 +25,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ received: true });
     }
 
-    const purchaseId: string = event.data?.id;
+    const purchaseId: string = event.data?.id ?? "";
     const reference: string = event.data?.reference ?? "";
+    const clientEmail: string = event.data?.client?.email ?? "";
 
-    if (!purchaseId) {
-      return NextResponse.json({ error: "Purchase ID tidak ada." }, { status: 400 });
-    }
-
+    // 1. Cuba cari dari jadual payments (flow API)
     const { data: payment } = await supabase
       .from("payments")
       .select("parent_id")
-      .eq("chip_purchase_id", purchaseId)
-      .single();
+      .or(`chip_purchase_id.eq.${purchaseId},chip_purchase_id.eq.${reference}`)
+      .maybeSingle();
 
-    if (!payment) {
-      const { data: paymentByRef } = await supabase
-        .from("payments")
-        .select("parent_id")
-        .eq("chip_purchase_id", reference)
-        .single();
-
-      if (!paymentByRef) {
-        console.error("Payment record not found:", purchaseId, reference);
-        return NextResponse.json({ received: true });
-      }
-
-      await activateSubscription(supabase, paymentByRef.parent_id, purchaseId, reference);
-    } else {
-      await activateSubscription(supabase, payment.parent_id, purchaseId, reference);
+    if (payment?.parent_id) {
+      await activateSubscription(supabase, payment.parent_id, purchaseId);
+      return NextResponse.json({ received: true });
     }
 
+    // 2. Fallback: cari user ikut email (payment link statik CHIP)
+    if (clientEmail) {
+      const { data: authUser } = await supabase.auth.admin.getUserByEmail(clientEmail);
+      if (authUser?.user?.id) {
+        await activateSubscription(supabase, authUser.user.id, purchaseId);
+        return NextResponse.json({ received: true });
+      }
+    }
+
+    console.error("Tidak dapat kenal pasti pembeli:", { purchaseId, reference, clientEmail });
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Webhook error:", err);
@@ -65,16 +61,21 @@ export async function POST(req: Request) {
 async function activateSubscription(
   supabase: SupabaseClient,
   parentId: string,
-  chipPurchaseId: string,
-  reference: string
+  chipPurchaseId: string
 ) {
-  await supabase
-    .from("payments")
-    .update({ status: "paid", paid_at: new Date().toISOString() })
-    .or(`chip_purchase_id.eq.${chipPurchaseId},chip_purchase_id.eq.${reference}`);
-
   await supabase
     .from("parents")
     .update({ subscription_status: "active" })
     .eq("id", parentId);
+
+  // Rekod payment jika belum ada
+  await supabase.from("payments").upsert({
+    parent_id: parentId,
+    chip_purchase_id: chipPurchaseId,
+    plan_id: "lifetime",
+    amount: 2900,
+    currency: "MYR",
+    status: "paid",
+    paid_at: new Date().toISOString(),
+  }, { onConflict: "chip_purchase_id", ignoreDuplicates: false });
 }
