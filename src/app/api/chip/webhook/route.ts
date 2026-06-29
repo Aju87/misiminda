@@ -21,23 +21,27 @@ export async function POST(req: Request) {
 
     const event = JSON.parse(body);
 
-    // Log full payload untuk debug
-    console.log("CHIP webhook payload:", JSON.stringify(event, null, 2));
+    // CHIP hantar type: "purchase" dengan status dalam payload
+    const eventType: string = event.type ?? event.event ?? "";
+    const eventStatus: string = event.status ?? "";
+    console.log("CHIP event type:", eventType, "status:", eventStatus);
 
-    const eventType = event.event ?? event.type ?? "";
-    if (eventType !== "purchase.paid") {
-      console.log("Bukan purchase.paid, event type:", eventType);
+    // Terima jika type=purchase (paid) atau event=purchase.paid
+    const isPaid =
+      eventType === "purchase.paid" ||
+      (eventType === "purchase" && eventStatus === "paid");
+
+    if (!isPaid) {
+      console.log("Bukan pembayaran selesai, skip.");
       return NextResponse.json({ received: true });
     }
 
-    const purchaseId: string = event.data?.id ?? event.id ?? "";
-    const reference: string = event.data?.reference ?? event.reference ?? "";
-    // Cuba beberapa path email yang mungkin dari CHIP
+    // Email & ID terus dalam root payload (bukan dalam data{})
+    const purchaseId: string = event.id ?? event.data?.id ?? "";
+    const reference: string = event.reference ?? event.data?.reference ?? "";
     const clientEmail: string =
-      event.data?.client?.email ??
-      event.data?.purchase?.client?.email ??
       event.client?.email ??
-      event.purchase?.client?.email ??
+      event.data?.client?.email ??
       "";
 
     console.log("Purchase ID:", purchaseId, "Email:", clientEmail);
