@@ -21,13 +21,26 @@ export async function POST(req: Request) {
 
     const event = JSON.parse(body);
 
-    if (event.event !== "purchase.paid") {
+    // Log full payload untuk debug
+    console.log("CHIP webhook payload:", JSON.stringify(event, null, 2));
+
+    const eventType = event.event ?? event.type ?? "";
+    if (eventType !== "purchase.paid") {
+      console.log("Bukan purchase.paid, event type:", eventType);
       return NextResponse.json({ received: true });
     }
 
-    const purchaseId: string = event.data?.id ?? "";
-    const reference: string = event.data?.reference ?? "";
-    const clientEmail: string = event.data?.client?.email ?? "";
+    const purchaseId: string = event.data?.id ?? event.id ?? "";
+    const reference: string = event.data?.reference ?? event.reference ?? "";
+    // Cuba beberapa path email yang mungkin dari CHIP
+    const clientEmail: string =
+      event.data?.client?.email ??
+      event.data?.purchase?.client?.email ??
+      event.client?.email ??
+      event.purchase?.client?.email ??
+      "";
+
+    console.log("Purchase ID:", purchaseId, "Email:", clientEmail);
 
     // 1. Cuba cari dari jadual payments (flow API)
     const { data: payment } = await supabase
