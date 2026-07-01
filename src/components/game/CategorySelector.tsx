@@ -17,6 +17,9 @@ const CATEGORY_META: Record<string, { emoji: string; color: string; bg: string; 
   bahagi:         { emoji: "➗", color: "#4ECDC4", bg: "#E8FAF9", label: "Bahagi" },
   pecahan:        { emoji: "½",  color: "#9B59B6", bg: "#F3E8FF", label: "Pecahan" },
   wang:           { emoji: "💰", color: "#27AE60", bg: "#E0F5E9", label: "Wang & Harga" },
+  "masa-ukuran":  { emoji: "⏰", color: "#3498DB", bg: "#E8F2FF", label: "Masa & Ukuran" },
+  geometri:       { emoji: "📐", color: "#E67E22", bg: "#FFF0E0", label: "Geometri" },
+  data:           { emoji: "📊", color: "#8E44AD", bg: "#F5E8FF", label: "Statistik & Data" },
 };
 
 export function CategorySelector({ kid, levels, getProgress, onSelectLevel, onBack }: CategorySelectorProps) {

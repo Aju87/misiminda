@@ -22,7 +22,7 @@ export interface Kid {
 }
 
 export type QuizMode = "misi" | "latihan";
-export type DrillCategory = "tambah-tolak" | "sifir" | "bahagi" | "pecahan" | "wang";
+export type DrillCategory = "tambah-tolak" | "sifir" | "bahagi" | "pecahan" | "wang" | "masa-ukuran" | "geometri" | "data";
 
 export interface Level {
   id: string;
