@@ -34,18 +34,18 @@ export const AGE_GROUPS = [
 ] as const;
 
 export const LEVEL_THEMES: Record<string, { color: string; bg: string }> = {
-  // BoBoiBoy (kuning/oren)
-  "BoBoiBoy: Selamatkan Ochobot!": { color: "#FFB800", bg: "#FFF8E1" },
-  "BoBoiBoy Galaxy: Perang Angkasa!": { color: "#FF8C00", bg: "#FFF3E0" },
-  "BoBoiBoy: Kuasa Elemen!": { color: "#F9A826", bg: "#FFF5E0" },
-  // Ejen Ali (merah/biru)
-  "Ejen Ali: Tangkap Pencuri!": { color: "#FF4757", bg: "#FFE8EA" },
-  "Ejen Ali: Operasi Rahsia!": { color: "#E84393", bg: "#FFE0F2" },
-  "Ejen Ali: Misi Mustahil!": { color: "#C0392B", bg: "#FDECEA" },
-  // Upin & Ipin (hijau/oren)
-  "Upin & Ipin: Hari Raya Gembira!": { color: "#27AE60", bg: "#E0F5E9" },
-  "Upin & Ipin: Musim Periksa!": { color: "#16A085", bg: "#E0F5F1" },
-  "Upin & Ipin: Juara Sekolah!": { color: "#1ABC9C", bg: "#E0FAF4" },
+  // RAGA (kuning/oren)
+  "RAGA: Selamatkan OBI!": { color: "#FFB800", bg: "#FFF8E1" },
+  "RAGA: Perang Angkasa!": { color: "#FF8C00", bg: "#FFF3E0" },
+  "RAGA: Kuasa Elemen!": { color: "#F9A826", bg: "#FFF5E0" },
+  // Agen Nur (merah/biru)
+  "Agen Nur: Tangkap Pencuri!": { color: "#FF4757", bg: "#FFE8EA" },
+  "Agen Nur: Operasi Rahsia!": { color: "#E84393", bg: "#FFE0F2" },
+  "Agen Nur: Misi Mustahil!": { color: "#C0392B", bg: "#FDECEA" },
+  // Kembar Ria (hijau/oren)
+  "Kembar Ria: Hari Raya Gembira!": { color: "#27AE60", bg: "#E0F5E9" },
+  "Kembar Ria: Musim Periksa!": { color: "#16A085", bg: "#E0F5F1" },
+  "Kembar Ria: Juara Sekolah!": { color: "#1ABC9C", bg: "#E0FAF4" },
   // Latihan themes (sebelum)
   "Tambah dalam 10": { color: "#FF6B6B", bg: "#FFE8E8" },
   "Tolak dalam 10": { color: "#F9A826", bg: "#FFF5E1" },
