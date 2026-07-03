@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Button, Card, Badge, Logo } from "@/components/ui";
 import { DemoWidget } from "@/components/landing/DemoWidget";
 
-const APP_URL = "https://misiminda.netlify.app/dashboard";
+const APP_URL = "https://misiminda.my/dashboard";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
