@@ -14,10 +14,12 @@ import { KidCard } from "@/components/dashboard/KidCard";
 import { AddKidModal } from "@/components/dashboard/AddKidModal";
 import { RewardCard } from "@/components/dashboard/RewardCard";
 import { AddRewardModal } from "@/components/dashboard/AddRewardModal";
+import { AdsSettings } from "@/components/dashboard/AdsSettings";
 import { Button, Card, Badge, Logo } from "@/components/ui";
+import { ADMIN_EMAIL } from "@/lib/constants";
 import type { Kid } from "@/types";
 
-type Tab = "kids" | "rewards" | "subscription";
+type Tab = "kids" | "rewards" | "subscription" | "ads";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -54,6 +56,10 @@ export default function DashboardPage() {
 
   const totalStars = kids.reduce((s, k) => s + k.total_stars, 0);
   const isSubscribed = parent.subscription_status === "active";
+  const isAdmin = parent.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  const tabs: Tab[] = isAdmin
+    ? ["kids", "rewards", "subscription", "ads"]
+    : ["kids", "rewards", "subscription"];
 
   async function handleSignOut() {
     await signOut();
@@ -121,8 +127,8 @@ export default function DashboardPage() {
           className="flex border-4 border-black rounded-2xl overflow-hidden"
           style={{ boxShadow: "4px 4px 0px 0px rgba(0,0,0,1)" }}
         >
-          {(["kids", "rewards", "subscription"] as Tab[]).map((t) => {
-            const labels = { kids: "👧 Kanak-Kanak", rewards: "🎁 Hadiah", subscription: "💳 Langganan" };
+          {tabs.map((t) => {
+            const labels = { kids: "👧 Kanak-Kanak", rewards: "🎁 Hadiah", subscription: "💳 Langganan", ads: "📢 Ads" };
             return (
               <button
                 key={t}
@@ -262,6 +268,8 @@ export default function DashboardPage() {
             </Card>
           </motion.div>
         )}
+        {/* Ads tab (admin sahaja) */}
+        {tab === "ads" && isAdmin && <AdsSettings />}
       </main>
 
       <AddKidModal open={addKidOpen} onClose={() => setAddKidOpen(false)} onAdd={addKid} />

@@ -16,6 +16,10 @@ export const SUBSCRIPTION_PLANS = {
   },
 } as const;
 
+// Email admin — hanya akaun ini nampak tab "Ads" dalam dashboard
+export const ADMIN_EMAIL =
+  process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? "hnrichhq@gmail.com";
+
 export const AVATARS = [
   { id: "rocket", emoji: "🚀", color: "#FFB800" },
   { id: "star", emoji: "⭐", color: "#FF6B6B" },

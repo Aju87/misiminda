@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { TrackingPixels } from "@/components/TrackingPixels";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -21,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ms">
-      <body className={`${spaceGrotesk.variable} antialiased`}>{children}</body>
+      <body className={`${spaceGrotesk.variable} antialiased`}>
+        <TrackingPixels />
+        {children}
+      </body>
     </html>
   );
 }
