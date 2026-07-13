@@ -32,9 +32,38 @@ export const AVATARS = [
 ] as const;
 
 export const AGE_GROUPS = [
+  { value: "2-5", label: "2 - 5 Tahun", grade: "Prasekolah · Si Kecil", emoji: "🐣" },
   { value: "5-6", label: "5 - 6 Tahun", grade: "KSPK", emoji: "🌱" },
   { value: "7-9", label: "7 - 9 Tahun", grade: "KSSR Tahap 1", emoji: "🌿" },
   { value: "10-12", label: "10 - 12 Tahun", grade: "KSSR Tahap 2", emoji: "🌳" },
+] as const;
+
+// Modul prasekolah (umur 2-5) untuk "Kuiz Si Kecil"
+export const PRESCHOOL_MODULES = [
+  {
+    id: "kenal-huruf",
+    emoji: "🔤",
+    title: "Mengenal Huruf",
+    desc: "Kenal & sebut huruf A hingga Z sambil main.",
+    color: "#FF6B6B",
+    bg: "#FFE8E8",
+  },
+  {
+    id: "eja",
+    emoji: "✏️",
+    title: "Belajar Mengeja",
+    desc: "Susun huruf jadi perkataan mudah.",
+    color: "#4ECDC4",
+    bg: "#E8FAF9",
+  },
+  {
+    id: "padanan",
+    emoji: "🧩",
+    title: "Kuiz Si Kecil",
+    desc: "Padankan gambar, huruf & perkataan.",
+    color: "#9B59B6",
+    bg: "#F3E8FF",
+  },
 ] as const;
 
 export const LEVEL_THEMES: Record<string, { color: string; bg: string }> = {

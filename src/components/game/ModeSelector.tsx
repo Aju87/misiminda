@@ -3,15 +3,16 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Logo } from "@/components/ui";
-import type { Kid, QuizMode } from "@/types";
+import { PRESCHOOL_MODULES } from "@/lib/constants";
+import type { Kid, QuizMode, PreschoolModule } from "@/types";
 
 interface ModeSelectorProps {
   kid: Kid;
-  onSelect: (mode: QuizMode) => void;
+  onSelect: (mode: QuizMode, category?: PreschoolModule) => void;
   onBack: () => void;
 }
 
-const MODES = [
+const MATH_MODES = [
   {
     id: "misi" as QuizMode,
     emoji: "🗺️",
@@ -31,6 +32,8 @@ const MODES = [
 ];
 
 export function ModeSelector({ kid, onSelect, onBack }: ModeSelectorProps) {
+  const isPreschool = kid.age_group === "2-5";
+
   return (
     <div className="min-h-screen bg-[#FFFDF2] flex flex-col">
       {/* Header */}
@@ -54,35 +57,58 @@ export function ModeSelector({ kid, onSelect, onBack }: ModeSelectorProps) {
 
       <div className="flex-1 flex flex-col gap-6 px-4 py-8 max-w-xl mx-auto w-full">
         <div className="text-center">
-          <h1 className="font-black text-3xl uppercase">Nak Buat Apa?</h1>
-          <p className="font-semibold text-gray-600 mt-1">Pilih mod untuk mulakan</p>
+          <h1 className="font-black text-3xl uppercase">
+            {isPreschool ? "Nak Belajar Apa? 🐣" : "Nak Buat Apa?"}
+          </h1>
+          <p className="font-semibold text-gray-600 mt-1">
+            {isPreschool ? "Pilih aktiviti untuk si kecil" : "Pilih mod untuk mulakan"}
+          </p>
         </div>
 
         <div className="flex flex-col gap-4">
-          {MODES.map((mode, i) => (
-            <motion.button
-              key={mode.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              onClick={() => onSelect(mode.id)}
-              style={{
-                backgroundColor: mode.bg,
-                boxShadow: "6px 6px 0px 0px rgba(0,0,0,1)",
-              }}
-              className="border-4 border-black rounded-2xl p-6 text-left hover:translate-x-[3px] hover:translate-y-[3px] transition-transform"
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="flex items-center gap-4">
-                <span className="text-5xl">{mode.emoji}</span>
-                <div className="flex-1">
-                  <p className="font-black text-xl uppercase">{mode.title}</p>
-                  <p className="font-semibold text-sm text-gray-700 mt-1">{mode.desc}</p>
-                </div>
-                <span className="font-black text-2xl">→</span>
-              </div>
-            </motion.button>
-          ))}
+          {isPreschool
+            ? PRESCHOOL_MODULES.map((mode, i) => (
+                <motion.button
+                  key={mode.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => onSelect("prasekolah", mode.id as PreschoolModule)}
+                  style={{ backgroundColor: mode.bg, boxShadow: "6px 6px 0px 0px rgba(0,0,0,1)" }}
+                  className="border-4 border-black rounded-2xl p-6 text-left hover:translate-x-[3px] hover:translate-y-[3px] transition-transform"
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="text-5xl">{mode.emoji}</span>
+                    <div className="flex-1">
+                      <p className="font-black text-xl uppercase">{mode.title}</p>
+                      <p className="font-semibold text-sm text-gray-700 mt-1">{mode.desc}</p>
+                    </div>
+                    <span className="font-black text-2xl">→</span>
+                  </div>
+                </motion.button>
+              ))
+            : MATH_MODES.map((mode, i) => (
+                <motion.button
+                  key={mode.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => onSelect(mode.id)}
+                  style={{ backgroundColor: mode.bg, boxShadow: "6px 6px 0px 0px rgba(0,0,0,1)" }}
+                  className="border-4 border-black rounded-2xl p-6 text-left hover:translate-x-[3px] hover:translate-y-[3px] transition-transform"
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="text-5xl">{mode.emoji}</span>
+                    <div className="flex-1">
+                      <p className="font-black text-xl uppercase">{mode.title}</p>
+                      <p className="font-semibold text-sm text-gray-700 mt-1">{mode.desc}</p>
+                    </div>
+                    <span className="font-black text-2xl">→</span>
+                  </div>
+                </motion.button>
+              ))}
         </div>
 
         {/* Stars display */}

@@ -98,7 +98,7 @@ export function QuizCard({
 
       {/* Options grid */}
       <div className="grid grid-cols-2 gap-4">
-        {question.options.map((option, i) => (
+        {(question.options as QuestionOption[]).map((option, i) => (
           <motion.button
             key={i}
             onClick={() => handleSelect(option)}

@@ -9,7 +9,7 @@ export interface Parent {
   created_at: string;
 }
 
-export type AgeGroup = "5-6" | "7-9" | "10-12";
+export type AgeGroup = "2-5" | "5-6" | "7-9" | "10-12";
 
 export interface Kid {
   id: string;
@@ -21,8 +21,9 @@ export interface Kid {
   created_at: string;
 }
 
-export type QuizMode = "misi" | "latihan";
+export type QuizMode = "misi" | "latihan" | "prasekolah";
 export type DrillCategory = "tambah-tolak" | "sifir" | "bahagi" | "pecahan" | "wang" | "masa-ukuran" | "geometri" | "data";
+export type PreschoolModule = "kenal-huruf" | "eja" | "padanan";
 
 export interface Level {
   id: string;
@@ -31,21 +32,35 @@ export interface Level {
   level_number: number;
   description?: string;
   quiz_mode: QuizMode;
-  category?: DrillCategory;
+  category?: DrillCategory | PreschoolModule;
   icon?: string;
 }
 
 export type QuestionOption = string | number;
+
+// Jenis interaksi soalan:
+//  "pilihan" = tekan satu jawapan betul (kenal huruf / pilih perkataan)
+//  "susun"   = susun huruf jadi perkataan (mengeja)
+//  "padanan" = padan sisi A ke B dengan garisan
+export type QuestionType = "pilihan" | "susun" | "padanan";
+
+export interface MatchPair {
+  left: string;
+  right: string;
+}
 
 export interface Question {
   id: string;
   level_id: string;
   story_text: string;
   question_text: string;
-  options: QuestionOption[];
-  correct_answer: QuestionOption;
+  // untuk pilihan/susun: senarai pilihan; untuk padanan: { pairs }
+  options: QuestionOption[] | { pairs: MatchPair[] };
+  // untuk pilihan/susun: jawapan tunggal; untuk padanan: senarai pasangan betul
+  correct_answer: QuestionOption | MatchPair[];
   success_message: string;
   order_index: number;
+  question_type?: QuestionType;
 }
 
 export interface Reward {

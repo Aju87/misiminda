@@ -9,11 +9,14 @@ import { KidSelector } from "@/components/game/KidSelector";
 import { ModeSelector } from "@/components/game/ModeSelector";
 import { LevelMap } from "@/components/game/LevelMap";
 import { CategorySelector } from "@/components/game/CategorySelector";
+import { PreschoolLevelList } from "@/components/game/PreschoolLevelList";
 import { QuizCard } from "@/components/game/QuizCard";
+import { PreschoolCard } from "@/components/game/PreschoolCard";
+import { MatchingCard } from "@/components/game/MatchingCard";
 import { ResultScreen } from "@/components/game/ResultScreen";
-import type { Kid, Level, Question, QuestionOption, QuizMode } from "@/types";
+import type { Kid, Level, Question, QuestionOption, QuizMode, PreschoolModule } from "@/types";
 
-type Screen = "select-kid" | "select-mode" | "level-map" | "category" | "quiz" | "result";
+type Screen = "select-kid" | "select-mode" | "level-map" | "category" | "prasekolah" | "quiz" | "result";
 
 function PlayContent() {
   const router = useRouter();
@@ -25,6 +28,7 @@ function PlayContent() {
   const [selectedKid, setSelectedKid] = useState<Kid | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [quizMode, setQuizMode] = useState<QuizMode>("misi");
+  const [selectedModule, setSelectedModule] = useState<PreschoolModule | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -80,9 +84,14 @@ function PlayContent() {
     setScreen("select-mode");
   }
 
-  function handleSelectMode(mode: QuizMode) {
+  function handleSelectMode(mode: QuizMode, category?: PreschoolModule) {
     setQuizMode(mode);
-    setScreen(mode === "misi" ? "level-map" : "category");
+    if (mode === "prasekolah") {
+      setSelectedModule(category ?? null);
+      setScreen("prasekolah");
+    } else {
+      setScreen(mode === "misi" ? "level-map" : "category");
+    }
   }
 
   async function handleSelectLevel(level: Level) {
@@ -124,13 +133,22 @@ function PlayContent() {
     setCurrentIndex(0);
     setCorrectCount(0);
     setSelectedLevel(null);
-    setScreen(quizMode === "misi" ? "level-map" : "category");
+    setScreen(
+      quizMode === "misi" ? "level-map" : quizMode === "prasekolah" ? "prasekolah" : "category"
+    );
   }
+
+  // Level dalam modul semasa (untuk prasekolah, tapis ikut modul terpilih)
+  const moduleLevels =
+    quizMode === "prasekolah" && selectedModule
+      ? levels.filter((l) => l.category === selectedModule)
+      : levels;
 
   async function handleNextLevel() {
     if (!selectedLevel) return;
-    const currentIdx = levels.findIndex((l) => l.id === selectedLevel.id);
-    const next = levels[currentIdx + 1];
+    const pool = quizMode === "prasekolah" ? moduleLevels : levels;
+    const currentIdx = pool.findIndex((l) => l.id === selectedLevel.id);
+    const next = pool[currentIdx + 1];
     if (!next) return;
     await handleSelectLevel(next);
   }
@@ -139,7 +157,7 @@ function PlayContent() {
   const pct = questions.length > 0 ? correctCount / questions.length : 0;
   const starsEarned = pct === 1 ? 10 : pct >= 0.7 ? 7 : pct >= 0.5 ? 5 : 3;
   const nextLevel = selectedLevel
-    ? levels[levels.findIndex((l) => l.id === selectedLevel.id) + 1]
+    ? moduleLevels[moduleLevels.findIndex((l) => l.id === selectedLevel.id) + 1]
     : undefined;
 
   if (loadingKids) {
@@ -231,6 +249,25 @@ function PlayContent() {
         </motion.div>
       )}
 
+      {screen === "prasekolah" && selectedKid && selectedModule && (
+        <motion.div key="prasekolah" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          {levelsLoading ? (
+            <div className="min-h-screen bg-[#FFFDF2] flex items-center justify-center">
+              <div className="text-4xl animate-pulse">🐣</div>
+            </div>
+          ) : (
+            <PreschoolLevelList
+              kid={selectedKid}
+              module={selectedModule}
+              levels={moduleLevels}
+              getProgress={getProgress}
+              onSelectLevel={handleSelectLevel}
+              onBack={() => setScreen("select-mode")}
+            />
+          )}
+        </motion.div>
+      )}
+
       {screen === "quiz" && selectedKid && selectedLevel && (
         <motion.div
           key="quiz"
@@ -275,13 +312,31 @@ function PlayContent() {
           ) : (
             <div className="px-4 py-8">
               <AnimatePresence mode="wait">
-                <QuizCard
-                  key={`${selectedLevel.id}-${currentIndex}`}
-                  question={questions[currentIndex]}
-                  questionNumber={currentIndex + 1}
-                  totalQuestions={questions.length}
-                  onAnswer={handleAnswer}
-                />
+                {questions[currentIndex].question_type === "padanan" ? (
+                  <MatchingCard
+                    key={`${selectedLevel.id}-${currentIndex}`}
+                    question={questions[currentIndex]}
+                    questionNumber={currentIndex + 1}
+                    totalQuestions={questions.length}
+                    onAnswer={(correct) => handleAnswer(correct, "")}
+                  />
+                ) : quizMode === "prasekolah" ? (
+                  <PreschoolCard
+                    key={`${selectedLevel.id}-${currentIndex}`}
+                    question={questions[currentIndex]}
+                    questionNumber={currentIndex + 1}
+                    totalQuestions={questions.length}
+                    onAnswer={(correct) => handleAnswer(correct, "")}
+                  />
+                ) : (
+                  <QuizCard
+                    key={`${selectedLevel.id}-${currentIndex}`}
+                    question={questions[currentIndex]}
+                    questionNumber={currentIndex + 1}
+                    totalQuestions={questions.length}
+                    onAnswer={handleAnswer}
+                  />
+                )}
               </AnimatePresence>
             </div>
           )}
