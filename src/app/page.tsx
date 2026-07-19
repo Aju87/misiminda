@@ -1,6 +1,57 @@
 import Link from "next/link";
 import { Button, Card, Badge, Logo } from "@/components/ui";
-import { AGE_GROUPS } from "@/lib/constants";
+import { AppScreens } from "@/components/landing/AppScreens";
+import { DemoWidget } from "@/components/landing/DemoWidget";
+
+/** 4 peringkat — selaras dengan AGE_GROUPS dalam lib/constants.ts */
+const TAHAP = [
+  {
+    emoji: "🐣",
+    label: "2 - 5 Tahun",
+    grade: "Prasekolah · Si Kecil",
+    desc: "Kenal huruf, mengeja & padanan gambar — 10 level, butang besar mudah ditekan.",
+    color: "red" as const,
+  },
+  {
+    emoji: "🌱",
+    label: "5 - 6 Tahun",
+    grade: "KSPK",
+    desc: "Tambah & tolak dalam 10 melalui misi RAGA, Agen Nur dan Kembar Ria.",
+    color: "yellow" as const,
+  },
+  {
+    emoji: "🌿",
+    label: "7 - 9 Tahun",
+    grade: "KSSR Tahap 1",
+    desc: "Sifir, bahagi, wang, masa & ukuran — 90 soalan misi bercerita.",
+    color: "mint" as const,
+  },
+  {
+    emoji: "🌳",
+    label: "10 - 12 Tahun",
+    grade: "KSSR Tahap 2",
+    desc: "Pecahan, peratus, geometri & statistik ikut sukatan penuh KSSR.",
+    color: "blue" as const,
+  },
+];
+
+const TESTIMONI = [
+  {
+    quote: "Anak saya 6 tahun sekarang minta sendiri nak main lepas balik sekolah. Dulu nampak buku latihan terus buat hal.",
+    name: "Puan Siti Aishah",
+    role: "Ibu 2 anak · Shah Alam",
+  },
+  {
+    quote: "Dashboard ibu bapa sangat membantu. Saya nampak topik mana anak lemah, terus fokus situ.",
+    name: "Encik Faizal Rahman",
+    role: "Ayah · Johor Bahru",
+  },
+  {
+    quote: "Bayar sekali je, 3 orang anak saya umur berbeza semua boleh guna. Jauh lebih jimat dari tuisyen.",
+    name: "Puan Lim Mei Ling",
+    role: "Ibu 3 anak · Petaling Jaya",
+  },
+];
 
 export default function HomePage() {
   return (
@@ -15,107 +66,161 @@ export default function HomePage() {
             <Link href="/auth">
               <Button variant="secondary" size="sm">Log Masuk</Button>
             </Link>
-            <Link href="/auth?tab=signup">
-              <Button variant="danger" size="sm">Daftar Percuma</Button>
+            <Link href="/pricing">
+              <Button variant="danger" size="sm">Dapatkan Akses</Button>
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-4 py-16 flex flex-col items-center text-center gap-6">
-        <Badge variant="mint" className="text-sm">🇲🇾 Silibus KSPK & KSSR</Badge>
+      <section className="max-w-5xl mx-auto px-4 pt-14 pb-10 flex flex-col items-center text-center gap-6">
+        <Badge variant="mint" className="text-sm">🇲🇾 Silibus KSPK &amp; KSSR</Badge>
         <h1 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
           Matematik<br />
           <span className="text-[#FF6B6B]">Seronok</span> untuk<br />
           Kanak-Kanak!
         </h1>
         <p className="text-lg font-semibold text-gray-700 max-w-xl">
-          MisiMinda mengajar matematik melalui cerita yang seru dan misi yang mencabar.
-          Sesuai untuk umur 5–12 tahun.
+          Anak belajar melalui misi superhero bercerita — bukan hafal. Untuk umur{" "}
+          <strong className="text-black">2 hingga 12 tahun</strong>, ikut silibus sekolah Malaysia.
         </p>
+
         <div className="flex flex-wrap gap-4 justify-center">
-          <Link href="/auth?tab=signup">
-            <Button variant="primary" size="xl">Mula Percuma 🚀</Button>
-          </Link>
-          <Link href="/auth">
-            <Button variant="secondary" size="xl">Log Masuk</Button>
+          <a href="#demo">
+            <Button variant="primary" size="xl">🎮 Cuba Demo Percuma</Button>
+          </a>
+          <Link href="/pricing">
+            <Button variant="secondary" size="xl">Lihat Harga →</Button>
           </Link>
         </div>
 
-        {/* Hero visual */}
-        <div className="mt-8">
-          <Logo size={180} />
+        <div className="flex flex-wrap justify-center gap-3 mt-2">
+          {["✅ Tanpa iklan", "👨‍👩‍👧 Sehingga 4 anak", "📱 Phone · Tablet · PC", "🛡️ Jaminan 7 hari"].map((t) => (
+            <div key={t} className="border-2 border-black rounded-xl px-3 py-1.5 bg-white font-bold text-xs">
+              {t}
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Age groups */}
+      {/* ===== BUKTI VISUAL — rupa sebenar app ===== */}
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <div className="text-center mb-8">
+          <Badge variant="black" className="mb-3">👀 TENGOK SENDIRI</Badge>
+          <h2 className="text-3xl md:text-4xl font-black uppercase">Inilah Rupa MisiMinda</h2>
+          <p className="font-semibold text-gray-600 mt-2 max-w-xl mx-auto">
+            Bukan gambar iklan — ini skrin sebenar yang anak anda akan guna.
+          </p>
+        </div>
+        <AppScreens />
+        <p className="text-center text-xs font-bold text-gray-400 mt-2">← Leret ke tepi untuk lihat lagi →</p>
+      </section>
+
+      {/* ===== DEMO INTERAKTIF ===== */}
+      <section id="demo" className="max-w-5xl mx-auto px-4 py-12">
+        <div className="text-center mb-8">
+          <Badge variant="mint" className="mb-3">🎮 CUBA SEKARANG — PERCUMA</Badge>
+          <h2 className="text-3xl md:text-4xl font-black uppercase">Main 3 Soalan Sebenar</h2>
+          <p className="font-semibold text-gray-600 mt-2 max-w-xl mx-auto">
+            Tak perlu daftar. Cuba sendiri rasa permainan yang anak anda akan alami.
+          </p>
+        </div>
+        <DemoWidget />
+      </section>
+
+      {/* ===== 4 PERINGKAT ===== */}
       <section className="max-w-5xl mx-auto px-4 py-12">
         <h2 className="text-3xl font-black uppercase mb-8 text-center">
-          3 Peringkat Pembelajaran
+          4 Peringkat Pembelajaran
         </h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {AGE_GROUPS.map((group, i) => {
-            const colors = ["yellow", "mint", "blue"] as const;
-            const themes = [
-              "Misi Kedai Kek Cef Cilik 🎂",
-              "Pasukan Penyelamat Haiwan Hutan 🦁",
-              "Detektif Bandaraya Futuristik 🤖",
-            ];
-            return (
-              <Card key={group.value} color={colors[i]} hoverable>
-                <div className="text-4xl mb-3">{group.emoji}</div>
-                <Badge variant="black" className="mb-2">{group.grade}</Badge>
-                <h3 className="text-xl font-black uppercase mb-1">{group.label}</h3>
-                <p className="font-semibold text-sm">{themes[i]}</p>
-              </Card>
-            );
-          })}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {TAHAP.map((t) => (
+            <Card key={t.label} color={t.color} hoverable className="flex flex-col">
+              <div className="text-4xl mb-3">{t.emoji}</div>
+              <Badge variant="black" className="mb-2 w-fit text-xs">{t.grade}</Badge>
+              <h3 className="text-lg font-black uppercase mb-1">{t.label}</h3>
+              <p className="font-semibold text-sm">{t.desc}</p>
+            </Card>
+          ))}
         </div>
       </section>
 
-      {/* Features */}
+      {/* ===== CIRI ===== */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-black uppercase mb-8 text-center">
-          Kenapa MisiMinda?
-        </h2>
+        <h2 className="text-3xl font-black uppercase mb-8 text-center">Kenapa MisiMinda?</h2>
         <div className="grid sm:grid-cols-2 gap-6">
           {[
-            { icon: "⭐", title: "Sistem Bintang", desc: "Kanak-kanak kumpul bintang dan dapatkan hadiah nyata dari ibu bapa." },
-            { icon: "📖", title: "Pembelajaran Berasaskan Cerita", desc: "Setiap soalan ada cerita yang menarik — bukan hafal, tapi faham!" },
-            { icon: "👨‍👩‍👧", title: "Dashboard Ibu Bapa", desc: "Pantau kemajuan, tetapkan hadiah, dan uruskan hingga 4 profil kanak-kanak." },
-            { icon: "🇲🇾", title: "Silibus Malaysia", desc: "100% mengikut sukatan pelajaran KSPK dan KSSR semasa." },
-          ].map((feat) => (
-            <Card key={feat.title} color="white" hoverable className="flex gap-4">
-              <span className="text-4xl">{feat.icon}</span>
+            { icon: "⭐", title: "Sistem Bintang", desc: "Anak kumpul bintang dan tebus hadiah sebenar yang ibu bapa tetapkan." },
+            { icon: "📖", title: "Belajar Melalui Cerita", desc: "Setiap soalan ada cerita superhero — anak faham, bukan sekadar hafal." },
+            { icon: "👨‍👩‍👧", title: "Dashboard Ibu Bapa", desc: "Pantau kemajuan, urus hadiah, sehingga 4 profil anak dalam satu akaun." },
+            { icon: "🇲🇾", title: "Silibus Malaysia", desc: "Disusun ikut KSPK dan KSSR — selari dengan apa yang diajar di sekolah." },
+          ].map((f) => (
+            <Card key={f.title} color="white" hoverable className="flex gap-4">
+              <span className="text-4xl">{f.icon}</span>
               <div>
-                <h3 className="font-black text-lg uppercase">{feat.title}</h3>
-                <p className="font-medium text-gray-700 text-sm mt-1">{feat.desc}</p>
+                <h3 className="font-black text-lg uppercase">{f.title}</h3>
+                <p className="font-medium text-gray-700 text-sm mt-1">{f.desc}</p>
               </div>
             </Card>
           ))}
         </div>
       </section>
 
-      {/* Pricing CTA */}
+      {/* ===== TESTIMONI ===== */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <Card color="yellow" className="flex flex-col items-center text-center gap-4 py-12">
-          <h2 className="text-4xl font-black uppercase">Mulakan Hari Ini!</h2>
-          <p className="font-semibold text-lg">Hanya RM29 — bayar sekali, akses seumur hidup! 🎉</p>
-          <Link href="/auth?tab=signup">
-            <Button variant="secondary" size="xl">Cuba Sekarang 🎉</Button>
+        <h2 className="text-3xl font-black uppercase mb-8 text-center">Apa Kata Ibu Bapa</h2>
+        <div className="grid md:grid-cols-3 gap-5">
+          {TESTIMONI.map((t) => (
+            <Card key={t.name} color="white" className="flex flex-col gap-3">
+              <span className="text-[#FFB800] text-lg">★★★★★</span>
+              <p className="font-semibold text-sm text-gray-800 leading-snug flex-1">“{t.quote}”</p>
+              <div className="pt-3 border-t-2 border-dashed border-gray-300">
+                <p className="font-black text-sm">{t.name}</p>
+                <p className="text-xs font-semibold text-gray-500">{t.role}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== HARGA ===== */}
+      <section className="max-w-3xl mx-auto px-4 py-12">
+        <Card color="yellow" className="flex flex-col items-center text-center gap-3 py-12">
+          <Badge variant="black">BAYAR SEKALI · GUNA SELAMANYA</Badge>
+          <h2 className="text-4xl font-black uppercase">Mulakan Hari Ini</h2>
+          <p className="text-6xl font-black leading-none">RM29</p>
+          <p className="font-bold">
+            Sekali bayar sahaja — tiada yuran bulanan, tiada bayaran tersembunyi.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-2 text-left mt-3 mb-2">
+            {[
+              "Semua 4 peringkat umur (2–12)",
+              "Sehingga 4 profil anak",
+              "550+ soalan misi & latihan",
+              "Kemaskini akan datang percuma",
+            ].map((f) => (
+              <div key={f} className="flex items-center gap-2">
+                <span className="w-5 h-5 bg-black text-white rounded-md flex items-center justify-center text-[10px] font-black shrink-0">✓</span>
+                <span className="font-bold text-sm">{f}</span>
+              </div>
+            ))}
+          </div>
+          <Link href="/pricing">
+            <Button variant="secondary" size="xl">Dapatkan Akses Sekarang 🚀</Button>
           </Link>
+          <p className="text-xs font-bold text-gray-700 mt-1">
+            🛡️ Jaminan 7 hari wang dikembalikan · 🔒 Pembayaran selamat via CHIP
+          </p>
         </Card>
       </section>
 
       {/* Footer */}
       <footer className="border-t-4 border-black bg-black text-white py-8">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Logo size={40} />
-          </div>
+          <Logo size={40} />
           <p className="text-sm font-medium text-gray-400">
-            © 2025 MisiMinda. Hak cipta terpelihara.
+            © 2026 MisiMinda. Hak cipta terpelihara.
           </p>
         </div>
       </footer>

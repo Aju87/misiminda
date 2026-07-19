@@ -5,6 +5,7 @@ import { Baloo_2 } from "next/font/google";
 import { motion } from "framer-motion";
 import { Logo } from "@/components/ui";
 import { DemoWidget } from "@/components/landing/DemoWidget";
+import { AppScreens } from "@/components/landing/AppScreens";
 
 const baloo = Baloo_2({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -67,7 +68,7 @@ const VALUE_STACK = [
   {
     emoji: "🗺️",
     title: "Misi Matematik Superhero",
-    desc: "270 soalan bercerita bersama RAGA, Agen Nur & Kembar Ria. 9 misi merentas 3 tahap umur — sistem unlock buat anak nak terus maju.",
+    desc: "270 soalan bercerita bersama RAGA, Agen Nur & Kembar Ria. 9 misi merentas 3 peringkat sekolah rendah — sistem unlock buat anak nak terus maju.",
     value: "RM150",
     bg: "from-[#fff4d6] to-[#ffe9b3]",
   },
@@ -136,7 +137,7 @@ const FAQS = [
   },
   {
     q: "Sesuai untuk umur berapa?",
-    a: "5 hingga 12 tahun. Kandungan disusun ikut 3 tahap — KSPK (prasekolah), KSSR Tahap 1 (7–9 tahun) dan KSSR Tahap 2 (10–12 tahun).",
+    a: "2 hingga 12 tahun. Empat peringkat: Prasekolah Si Kecil (2–5, kenal huruf & mengeja), KSPK (5–6), KSSR Tahap 1 (7–9) dan KSSR Tahap 2 (10–12).",
   },
   {
     q: "Berapa ramai anak boleh guna?",
@@ -187,7 +188,7 @@ export default function LandingPage() {
 
       {/* ===== ANNOUNCEMENT BAR ===== */}
       <div className="bg-[#ffd43b] text-[#4a3200] text-center px-4 py-2.5 font-bold text-sm">
-        👨‍👩‍👧 Khas untuk ibu bapa yang mahu anak 5–12 tahun kuasai Matematik sambil seronok
+        👨‍👩‍👧 Khas untuk ibu bapa yang mahu anak 2–12 tahun kuasai Matematik sambil seronok
       </div>
 
       {/* ===== NAV ===== */}
@@ -238,7 +239,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="mt-6 text-lg font-semibold text-[#5f5470] leading-relaxed">
-              550+ soalan interaktif · Misi superhero bercerita · 3 tahap umur (5–12 tahun) ·
+              550+ soalan interaktif · Misi superhero bercerita · 4 peringkat umur (2–12 tahun) ·
               selaras <strong className="text-[#2b2140]">KSPK + KSSR</strong>. Sistem ganjaran bintang
               buat anak <em className="text-[#ff2f7d] not-italic font-extrabold">minta sendiri</em> nak belajar.
             </p>
@@ -401,6 +402,25 @@ export default function LandingPage() {
       </section>
 
       {/* ===== VALUE STACK ===== */}
+      {/* ===== BUKTI VISUAL — rupa sebenar app ===== */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <Eyebrow color="#0ca678">👀 Tengok Sendiri</Eyebrow>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+              Inilah rupa MisiMinda
+            </h2>
+            <p className="mt-3 text-lg font-semibold text-[#5f5470] max-w-2xl mx-auto">
+              Bukan gambar iklan — ini skrin sebenar yang anak anda akan guna setiap hari.
+            </p>
+          </motion.div>
+          <AppScreens />
+          <p className="text-center text-xs font-bold text-[#9c8aa5] mt-2">
+            ← Leret ke tepi untuk lihat lagi →
+          </p>
+        </div>
+      </section>
+
       <section id="dapat" className="py-20 px-4 bg-gradient-to-b from-[#fdf6ff] to-[#f7efff]">
         <div className="max-w-6xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-12">
@@ -551,7 +571,7 @@ export default function LandingPage() {
             <div className="grid sm:grid-cols-2 gap-3 mt-9">
               {[
                 "550+ soalan misi & latihan",
-                "Semua 3 tahap umur (5–12 tahun)",
+                "Semua 4 peringkat umur (2–12 tahun)",
                 "Sehingga 4 profil anak",
                 "Sistem bintang & hadiah sebenar",
                 "Dashboard ibu bapa + PIN",
