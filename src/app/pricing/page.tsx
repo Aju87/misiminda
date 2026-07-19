@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { Button, Card, Badge, Logo } from "@/components/ui";
 import { SUBSCRIPTION_PLANS } from "@/lib/constants";
+import { trackInitiateCheckout } from "@/lib/tracking-client";
 
 export default function PricingPage() {
   const router = useRouter();
@@ -16,11 +17,21 @@ export default function PricingPage() {
 
   const CHIP_PAYMENT_URL = "https://pay.chip-in.asia/misiminda";
 
-  function handleSubscribe() {
+  async function handleSubscribe() {
     if (!user) {
       router.push("/auth?tab=signup");
       return;
     }
+
+    // Rekod InitiateCheckout + simpan data atribusi iklan SEBELUM keluar ke CHIP.
+    // Ada had masa supaya pembelian tidak tersekat jika rangkaian perlahan.
+    try {
+      await Promise.race([
+        trackInitiateCheckout(),
+        new Promise((r) => setTimeout(r, 1200)),
+      ]);
+    } catch { /* jangan halang pembelian */ }
+
     window.location.href = CHIP_PAYMENT_URL;
   }
 

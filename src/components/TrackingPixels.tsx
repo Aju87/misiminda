@@ -4,13 +4,6 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-declare global {
-  interface Window {
-    fbq?: (...args: unknown[]) => void;
-    ttq?: { page: () => void; load: (id: string) => void };
-  }
-}
-
 function injectMetaPixel(pixelId: string) {
   if (window.fbq) return;
   const script = document.createElement("script");
