@@ -73,6 +73,13 @@ const VALUE_STACK = [
     bg: "from-[#fff4d6] to-[#ffe9b3]",
   },
   {
+    emoji: "🔬",
+    title: "Subjek Sains Penuh — 511 Soalan",
+    desc: "40 topik ikut PERMATA, KSPK & KSSR: haiwan, deria, litar elektrik, fotosintesis, sistem suria, tenaga & mesin ringkas.",
+    value: "RM150",
+    bg: "from-[#dcf9e9] to-[#b8f0d4]",
+  },
+  {
     emoji: "⚡",
     title: "Latihan Pantas 8 Kategori",
     desc: "Tambah-tolak, sifir, bahagi, pecahan, wang, masa & ukuran, geometri, statistik — semua ikut silibus KSPK + KSSR.",
@@ -140,6 +147,10 @@ const FAQS = [
     a: "2 hingga 12 tahun. Empat peringkat: Prasekolah Si Kecil (2–5, kenal huruf & mengeja), KSPK (5–6), KSSR Tahap 1 (7–9) dan KSSR Tahap 2 (10–12).",
   },
   {
+    q: "Subjek apa yang ada?",
+    a: "Dua subjek penuh: Matematik (misi superhero, sifir, wang, geometri) dan Sains (haiwan, deria, litar elektrik, fotosintesis, sistem suria). Anak pilih subjek selepas pilih profil.",
+  },
+  {
     q: "Berapa ramai anak boleh guna?",
     a: "Sehingga 4 profil anak dalam satu akaun. Setiap anak ada progres dan bintang masing-masing.",
   },
@@ -188,7 +199,7 @@ export default function LandingPage() {
 
       {/* ===== ANNOUNCEMENT BAR ===== */}
       <div className="bg-[#ffd43b] text-[#4a3200] text-center px-4 py-2.5 font-bold text-sm">
-        👨‍👩‍👧 Khas untuk ibu bapa yang mahu anak 2–12 tahun kuasai Matematik sambil seronok
+        👨‍👩‍👧 Khas untuk ibu bapa yang mahu anak 2–12 tahun kuasai Matematik &amp; Sains sambil seronok
       </div>
 
       {/* ===== NAV ===== */}
@@ -232,14 +243,14 @@ export default function LandingPage() {
             <h1 className="text-[2.6rem] md:text-[3.6rem] font-extrabold leading-[1.06] tracking-tight">
               Anak Pandai{" "}
               <span className="relative inline-block">
-                Math
+                Math &amp; Sains
                 <span className="absolute left-0 right-0 bottom-1.5 h-3.5 bg-[#ffd43b] rounded-full -z-10" />
               </span>{" "}
-              dalam <span className="text-[#ff2f7d]">30 Hari</span> — Sambil Main, Tanpa Paksa!
+              — Sambil Main, <span className="text-[#ff2f7d]">Tanpa Paksa!</span>
             </h1>
 
             <p className="mt-6 text-lg font-semibold text-[#5f5470] leading-relaxed">
-              550+ soalan interaktif · Misi superhero bercerita · 4 peringkat umur (2–12 tahun) ·
+              1,000+ soalan Matematik &amp; Sains · Misi bercerita · 4 peringkat umur (2–12 tahun) ·
               selaras <strong className="text-[#2b2140]">KSPK + KSSR</strong>. Sistem ganjaran bintang
               buat anak <em className="text-[#ff2f7d] not-italic font-extrabold">minta sendiri</em> nak belajar.
             </p>
@@ -570,7 +581,7 @@ export default function LandingPage() {
 
             <div className="grid sm:grid-cols-2 gap-3 mt-9">
               {[
-                "550+ soalan misi & latihan",
+                "1,000+ soalan Matematik & Sains",
                 "Semua 4 peringkat umur (2–12 tahun)",
                 "Sehingga 4 profil anak",
                 "Sistem bintang & hadiah sebenar",

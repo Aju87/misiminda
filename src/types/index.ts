@@ -21,7 +21,8 @@ export interface Kid {
   created_at: string;
 }
 
-export type QuizMode = "misi" | "latihan" | "prasekolah";
+export type Subject = "matematik" | "sains";
+export type QuizMode = "misi" | "latihan" | "prasekolah" | "sains";
 export type DrillCategory = "tambah-tolak" | "sifir" | "bahagi" | "pecahan" | "wang" | "masa-ukuran" | "geometri" | "data";
 export type PreschoolModule = "kenal-huruf" | "eja" | "padanan";
 
@@ -32,8 +33,9 @@ export interface Level {
   level_number: number;
   description?: string;
   quiz_mode: QuizMode;
-  category?: DrillCategory | PreschoolModule;
+  category?: DrillCategory | PreschoolModule | string;
   icon?: string;
+  subject?: Subject;
 }
 
 export type QuestionOption = string | number;
@@ -42,11 +44,27 @@ export type QuestionOption = string | number;
 //  "pilihan" = tekan satu jawapan betul (kenal huruf / pilih perkataan)
 //  "susun"   = susun huruf jadi perkataan (mengeja)
 //  "padanan" = padan sisi A ke B dengan garisan
-export type QuestionType = "pilihan" | "susun" | "padanan";
+export type QuestionType =
+  | "pilihan"   // tekan satu jawapan betul
+  | "susun"     // susun huruf jadi perkataan (mengeja)
+  | "padanan"   // padan sisi A ke B dengan garisan
+  | "urutan"    // susun kad mengikut urutan betul (kitaran hidup, proses)
+  | "kategori"; // asingkan item kepada 2 kumpulan
 
 export interface MatchPair {
   left: string;
   right: string;
+}
+
+/** Data untuk soalan jenis "kategori" — dua bakul, item perlu diasingkan. */
+export interface CategoryData {
+  buckets: [string, string];
+  items: { label: string; bucket: 0 | 1 }[];
+}
+
+/** Data untuk soalan jenis "urutan" — kad disusun ikut turutan betul. */
+export interface SequenceData {
+  steps: string[];
 }
 
 export interface Question {
@@ -55,9 +73,9 @@ export interface Question {
   story_text: string;
   question_text: string;
   // untuk pilihan/susun: senarai pilihan; untuk padanan: { pairs }
-  options: QuestionOption[] | { pairs: MatchPair[] };
+  options: QuestionOption[] | { pairs: MatchPair[] } | CategoryData | SequenceData;
   // untuk pilihan/susun: jawapan tunggal; untuk padanan: senarai pasangan betul
-  correct_answer: QuestionOption | MatchPair[];
+  correct_answer: QuestionOption | MatchPair[] | string[];
   success_message: string;
   order_index: number;
   question_type?: QuestionType;

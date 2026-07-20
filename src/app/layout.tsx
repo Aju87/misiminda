@@ -10,9 +10,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "MisiMinda — Matematik Seronok Untuk Kanak-Kanak",
+  title: "MisiMinda — Matematik & Sains Seronok Untuk Kanak-Kanak",
   description:
-    "Platform pembelajaran matematik yang seru dan interaktif untuk kanak-kanak Malaysia.",
+    "Platform pembelajaran Matematik & Sains yang seru dan interaktif untuk kanak-kanak Malaysia, umur 2-12 tahun.",
 };
 
 export default function RootLayout({

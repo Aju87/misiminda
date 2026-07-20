@@ -20,6 +20,33 @@ export const SUBSCRIPTION_PLANS = {
 export const ADMIN_EMAIL =
   process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? "hnrichhq@gmail.com";
 
+export const SUBJECTS = [
+  {
+    id: "matematik",
+    emoji: "🔢",
+    title: "Matematik",
+    desc: "Misi superhero, sifir, wang, geometri & lagi.",
+    color: "#FFB800",
+    bg: "#FFF8E1",
+  },
+  {
+    id: "sains",
+    emoji: "🔬",
+    title: "Sains",
+    desc: "Haiwan, tubuh badan, tenaga & sistem suria.",
+    color: "#26D182",
+    bg: "#E0FFF0",
+  },
+] as const;
+
+/** Tema Sains mengikut kumpulan umur (PERMATA / KSPK / KSSR). */
+export const SCIENCE_THEMES: Record<string, { title: string; emoji: string; grade: string; color: string; bg: string }> = {
+  "2-5":   { title: "Pengembaraan Taman Safari",     emoji: "🦁", grade: "Asas PERMATA",  color: "#FF6B6B", bg: "#FFE8E8" },
+  "5-6":   { title: "Makmal Saintis Cilik",          emoji: "🧪", grade: "Sains Awal KSPK", color: "#4ECDC4", bg: "#E8FAF9" },
+  "7-9":   { title: "Detektif Alam Sekitar",         emoji: "🔍", grade: "KSSR Tahap 1",  color: "#45B7D1", bg: "#E8F6FB" },
+  "10-12": { title: "Penjelajah Angkasa & Masa Depan", emoji: "🚀", grade: "KSSR Tahap 2", color: "#9B59B6", bg: "#F3E8FF" },
+};
+
 export const AVATARS = [
   { id: "rocket", emoji: "🚀", color: "#FFB800" },
   { id: "star", emoji: "⭐", color: "#FF6B6B" },

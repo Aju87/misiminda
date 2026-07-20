@@ -2,9 +2,14 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { Level, Question, KidProgress, QuizMode } from "@/types";
+import type { Level, Question, KidProgress, QuizMode, Subject } from "@/types";
 
-export function useGameData(kidId: string | undefined, ageGroup: string | undefined, quizMode: QuizMode = "misi") {
+export function useGameData(
+  kidId: string | undefined,
+  ageGroup: string | undefined,
+  quizMode: QuizMode = "misi",
+  subject: Subject = "matematik"
+) {
   const [levels, setLevels] = useState<Level[]>([]);
   const [progress, setProgress] = useState<KidProgress[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,14 +19,20 @@ export function useGameData(kidId: string | undefined, ageGroup: string | undefi
     if (!kidId || !ageGroup) { setLoading(false); return; }
 
     const [{ data: lvls }, { data: prog }] = await Promise.all([
-      supabase.from("levels").select("*").eq("age_group", ageGroup).eq("quiz_mode", quizMode).order("level_number"),
+      supabase
+        .from("levels")
+        .select("*")
+        .eq("age_group", ageGroup)
+        .eq("quiz_mode", quizMode)
+        .eq("subject", subject)
+        .order("level_number"),
       supabase.from("kid_progress").select("*").eq("kid_id", kidId),
     ]);
 
     setLevels(lvls ?? []);
     setProgress(prog ?? []);
     setLoading(false);
-  }, [kidId, ageGroup, quizMode, supabase]);
+  }, [kidId, ageGroup, quizMode, subject, supabase]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 

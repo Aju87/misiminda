@@ -10,25 +10,30 @@ import { ModeSelector } from "@/components/game/ModeSelector";
 import { LevelMap } from "@/components/game/LevelMap";
 import { CategorySelector } from "@/components/game/CategorySelector";
 import { PreschoolLevelList } from "@/components/game/PreschoolLevelList";
+import { SubjectSelector } from "@/components/game/SubjectSelector";
+import { ScienceLevelList } from "@/components/game/ScienceLevelList";
 import { QuizCard } from "@/components/game/QuizCard";
 import { PreschoolCard } from "@/components/game/PreschoolCard";
 import { MatchingCard } from "@/components/game/MatchingCard";
+import { SequenceCard } from "@/components/game/SequenceCard";
+import { CategorySortCard } from "@/components/game/CategorySortCard";
 import { ResultScreen } from "@/components/game/ResultScreen";
-import type { Kid, Level, Question, QuestionOption, QuizMode, PreschoolModule } from "@/types";
+import type { Kid, Level, Question, QuestionOption, QuizMode, PreschoolModule, Subject } from "@/types";
 
-type Screen = "select-kid" | "select-mode" | "level-map" | "category" | "prasekolah" | "quiz" | "result";
+type Screen = "select-kid" | "select-subject" | "select-mode" | "level-map" | "category" | "prasekolah" | "sains" | "quiz" | "result";
 
 function PlayContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const kidParam = searchParams.get("kid");
 
-  const [screen, setScreen] = useState<Screen>(kidParam ? "select-mode" : "select-kid");
+  const [screen, setScreen] = useState<Screen>(kidParam ? "select-subject" : "select-kid");
   const [kids, setKids] = useState<Kid[]>([]);
   const [selectedKid, setSelectedKid] = useState<Kid | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [quizMode, setQuizMode] = useState<QuizMode>("misi");
   const [selectedModule, setSelectedModule] = useState<PreschoolModule | null>(null);
+  const [subject, setSubject] = useState<Subject>("matematik");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -37,7 +42,7 @@ function PlayContent() {
   const supabase = createClient();
 
   const { levels, loading: levelsLoading, fetchQuestions, saveProgress, getProgress } =
-    useGameData(selectedKid?.id, selectedKid?.age_group, quizMode);
+    useGameData(selectedKid?.id, selectedKid?.age_group, quizMode, subject);
 
   // Load kids on mount
   useEffect(() => {
@@ -70,7 +75,7 @@ function PlayContent() {
         const kid = kidsList.find((k) => k.id === kidParam);
         if (kid) {
           setSelectedKid(kid);
-          setScreen("select-mode");
+          setScreen("select-subject");
         }
       }
       setLoadingKids(false);
@@ -81,7 +86,19 @@ function PlayContent() {
 
   function handleSelectKid(kid: Kid) {
     setSelectedKid(kid);
-    setScreen("select-mode");
+    setScreen("select-subject");
+  }
+
+  function handleSelectSubject(s: Subject) {
+    setSubject(s);
+    if (s === "sains") {
+      setQuizMode("sains");
+      setSelectedModule(null);
+      setScreen("sains");
+    } else {
+      setQuizMode("misi");
+      setScreen("select-mode");
+    }
   }
 
   function handleSelectMode(mode: QuizMode, category?: PreschoolModule) {
@@ -134,7 +151,10 @@ function PlayContent() {
     setCorrectCount(0);
     setSelectedLevel(null);
     setScreen(
-      quizMode === "misi" ? "level-map" : quizMode === "prasekolah" ? "prasekolah" : "category"
+      quizMode === "sains" ? "sains"
+      : quizMode === "misi" ? "level-map"
+      : quizMode === "prasekolah" ? "prasekolah"
+      : "category"
     );
   }
 
@@ -203,12 +223,40 @@ function PlayContent() {
         </motion.div>
       )}
 
+      {screen === "select-subject" && selectedKid && (
+        <motion.div key="select-subject" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <SubjectSelector
+            kid={selectedKid}
+            onSelect={handleSelectSubject}
+            onBack={() => setScreen("select-kid")}
+          />
+        </motion.div>
+      )}
+
+      {screen === "sains" && selectedKid && (
+        <motion.div key="sains" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          {levelsLoading ? (
+            <div className="min-h-screen bg-[#FFFDF2] flex items-center justify-center">
+              <div className="text-4xl animate-pulse">🔬</div>
+            </div>
+          ) : (
+            <ScienceLevelList
+              kid={selectedKid}
+              levels={levels}
+              getProgress={getProgress}
+              onSelectLevel={handleSelectLevel}
+              onBack={() => setScreen("select-subject")}
+            />
+          )}
+        </motion.div>
+      )}
+
       {screen === "select-mode" && selectedKid && (
         <motion.div key="select-mode" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <ModeSelector
             kid={selectedKid}
             onSelect={handleSelectMode}
-            onBack={() => setScreen("select-kid")}
+            onBack={() => setScreen("select-subject")}
           />
         </motion.div>
       )}
@@ -312,7 +360,23 @@ function PlayContent() {
           ) : (
             <div className="px-4 py-8">
               <AnimatePresence mode="wait">
-                {questions[currentIndex].question_type === "padanan" ? (
+                {questions[currentIndex].question_type === "urutan" ? (
+                  <SequenceCard
+                    key={`${selectedLevel.id}-${currentIndex}`}
+                    question={questions[currentIndex]}
+                    questionNumber={currentIndex + 1}
+                    totalQuestions={questions.length}
+                    onAnswer={(correct) => handleAnswer(correct, "")}
+                  />
+                ) : questions[currentIndex].question_type === "kategori" ? (
+                  <CategorySortCard
+                    key={`${selectedLevel.id}-${currentIndex}`}
+                    question={questions[currentIndex]}
+                    questionNumber={currentIndex + 1}
+                    totalQuestions={questions.length}
+                    onAnswer={(correct) => handleAnswer(correct, "")}
+                  />
+                ) : questions[currentIndex].question_type === "padanan" ? (
                   <MatchingCard
                     key={`${selectedLevel.id}-${currentIndex}`}
                     question={questions[currentIndex]}
@@ -320,7 +384,7 @@ function PlayContent() {
                     totalQuestions={questions.length}
                     onAnswer={(correct) => handleAnswer(correct, "")}
                   />
-                ) : quizMode === "prasekolah" ? (
+                ) : quizMode === "prasekolah" || (subject === "sains" && selectedKid.age_group === "2-5") ? (
                   <PreschoolCard
                     key={`${selectedLevel.id}-${currentIndex}`}
                     question={questions[currentIndex]}

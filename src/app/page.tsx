@@ -9,28 +9,28 @@ const TAHAP = [
     emoji: "🐣",
     label: "2 - 5 Tahun",
     grade: "Prasekolah · Si Kecil",
-    desc: "Kenal huruf, mengeja & padanan gambar — 10 level, butang besar mudah ditekan.",
+    desc: "Kenal huruf & mengeja, plus Sains PERMATA: haiwan, warna, cuaca & deria.",
     color: "red" as const,
   },
   {
     emoji: "🌱",
     label: "5 - 6 Tahun",
     grade: "KSPK",
-    desc: "Tambah & tolak dalam 10 melalui misi RAGA, Agen Nur dan Kembar Ria.",
+    desc: "Matematik misi superhero + Sains KSPK: benda hidup, timbul-tenggelam, kitaran hidup.",
     color: "yellow" as const,
   },
   {
     emoji: "🌿",
     label: "7 - 9 Tahun",
     grade: "KSSR Tahap 1",
-    desc: "Sifir, bahagi, wang, masa & ukuran — 90 soalan misi bercerita.",
+    desc: "Sifir & wang, plus Sains KSSR: gigi, rantai makanan, litar elektrik & magnet.",
     color: "mint" as const,
   },
   {
     emoji: "🌳",
     label: "10 - 12 Tahun",
     grade: "KSSR Tahap 2",
-    desc: "Pecahan, peratus, geometri & statistik ikut sukatan penuh KSSR.",
+    desc: "Pecahan & geometri, plus Sains: sistem suria, fotosintesis, tenaga & mesin ringkas.",
     color: "blue" as const,
   },
 ];
@@ -77,13 +77,13 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-4 pt-14 pb-10 flex flex-col items-center text-center gap-6">
         <Badge variant="mint" className="text-sm">🇲🇾 Silibus KSPK &amp; KSSR</Badge>
         <h1 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
-          Matematik<br />
+          Matematik &amp; Sains<br />
           <span className="text-[#FF6B6B]">Seronok</span> untuk<br />
           Kanak-Kanak!
         </h1>
         <p className="text-lg font-semibold text-gray-700 max-w-xl">
-          Anak belajar melalui misi superhero bercerita — bukan hafal. Untuk umur{" "}
-          <strong className="text-black">2 hingga 12 tahun</strong>, ikut silibus sekolah Malaysia.
+          Dua subjek dalam satu app — anak belajar melalui misi bercerita, bukan hafal.
+          Untuk umur <strong className="text-black">2 hingga 12 tahun</strong>, ikut silibus KSPK, KSSR &amp; PERMATA.
         </p>
 
         <div className="flex flex-wrap gap-4 justify-center">
@@ -154,7 +154,8 @@ export default function HomePage() {
             { icon: "⭐", title: "Sistem Bintang", desc: "Anak kumpul bintang dan tebus hadiah sebenar yang ibu bapa tetapkan." },
             { icon: "📖", title: "Belajar Melalui Cerita", desc: "Setiap soalan ada cerita superhero — anak faham, bukan sekadar hafal." },
             { icon: "👨‍👩‍👧", title: "Dashboard Ibu Bapa", desc: "Pantau kemajuan, urus hadiah, sehingga 4 profil anak dalam satu akaun." },
-            { icon: "🇲🇾", title: "Silibus Malaysia", desc: "Disusun ikut KSPK dan KSSR — selari dengan apa yang diajar di sekolah." },
+            { icon: "🔬", title: "Matematik & Sains", desc: "Dua subjek penuh: misi matematik, dan sains dari haiwan hingga sistem suria." },
+            { icon: "🇲🇾", title: "Silibus Malaysia", desc: "Disusun ikut PERMATA, KSPK dan KSSR — selari dengan sekolah." },
           ].map((f) => (
             <Card key={f.title} color="white" hoverable className="flex gap-4">
               <span className="text-4xl">{f.icon}</span>
@@ -197,7 +198,7 @@ export default function HomePage() {
             {[
               "Semua 4 peringkat umur (2–12)",
               "Sehingga 4 profil anak",
-              "550+ soalan misi & latihan",
+              "1,000+ soalan Matematik & Sains",
               "Kemaskini akan datang percuma",
             ].map((f) => (
               <div key={f} className="flex items-center gap-2">
