@@ -4,6 +4,10 @@ import { verifyChipWebhook } from "@/lib/chip";
 import { getAdSettings } from "@/lib/ad-settings";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { sendTikTokEvent } from "@/lib/tiktok-events";
+import { COMMISSION_SEN, HOLD_DAYS } from "@/lib/affiliate";
+
+// Pemisah harga: app = RM35 (3500 sen), join affiliate = RM50 (5000 sen)
+const AFFILIATE_JOIN_MIN_SEN = 4500;
 
 export async function POST(req: Request) {
   const supabase = createClient(
@@ -41,7 +45,11 @@ export async function POST(req: Request) {
       event.data?.client?.email ??
       "";
 
-    console.log("Purchase ID:", purchaseId, "Email:", clientEmail);
+    // Jumlah dibayar (sen) — untuk bezakan jualan app vs join affiliate
+    const amountSen: number =
+      Number(event.purchase?.total ?? event.payment?.amount ?? event.data?.purchase?.total ?? event.amount ?? 0) || 0;
+
+    console.log("Purchase ID:", purchaseId, "Email:", clientEmail, "Amount(sen):", amountSen);
 
     // 1. Cuba cari dari jadual payments (flow API)
     const { data: payment } = await supabase
@@ -52,6 +60,7 @@ export async function POST(req: Request) {
 
     if (payment?.parent_id) {
       await activateSubscription(supabase, payment.parent_id, purchaseId);
+      await handleAffiliate(supabase, payment.parent_id, amountSen);
       await trackPurchase(supabase, payment.parent_id, purchaseId, clientEmail);
       return NextResponse.json({ received: true });
     }
@@ -69,6 +78,7 @@ export async function POST(req: Request) {
       if (parentByEmail?.id) {
         await activateSubscription(supabase, parentByEmail.id, purchaseId);
         console.log("Subscription activated for:", parentByEmail.id);
+        await handleAffiliate(supabase, parentByEmail.id, amountSen);
         await trackPurchase(supabase, parentByEmail.id, purchaseId, clientEmail);
         return NextResponse.json({ received: true });
       }
@@ -133,7 +143,7 @@ async function trackPurchase(
           },
           customData: {
             currency: "MYR",
-            value: 29,
+            value: 35,
             content_name: "MisiMinda Seumur Hidup",
             content_ids: ["lifetime"],
             content_type: "product",
@@ -157,9 +167,9 @@ async function trackPurchase(
           },
           properties: {
             currency: "MYR",
-            value: 29,
+            value: 35,
             order_id: chipPurchaseId,
-            contents: [{ content_id: "lifetime", content_name: "MisiMinda Seumur Hidup", quantity: 1, price: 29 }],
+            contents: [{ content_id: "lifetime", content_name: "MisiMinda Seumur Hidup", quantity: 1, price: 35 }],
           },
         }
       ),
@@ -172,6 +182,65 @@ async function trackPurchase(
     // Tracking gagal TIDAK boleh menjejaskan pengaktifan langganan
     console.error("trackPurchase error:", err);
   }
+}
+
+/**
+ * Logik affiliate selepas pembayaran berjaya.
+ *  - Bayaran RM50 (>= RM45) → daftar pembeli sebagai affiliate (jana kod).
+ *  - Bayaran app RM35       → kredit komisen RM15 kepada perujuk (jika ada),
+ *                             ditahan 7 hari (tempoh refund) sebelum boleh dikeluarkan.
+ */
+async function handleAffiliate(supabase: SupabaseClient, parentId: string, amountSen: number) {
+  try {
+    if (amountSen >= AFFILIATE_JOIN_MIN_SEN) {
+      const { data: existing } = await supabase
+        .from("affiliates").select("code").eq("parent_id", parentId).maybeSingle();
+      if (!existing) {
+        const code = await genAffiliateCode(supabase);
+        await supabase.from("affiliates").insert({ parent_id: parentId, code, status: "active" });
+        console.log("Affiliate dicipta:", parentId, code);
+      }
+      return; // join affiliate tidak menjana komisen kepada perujuk lain
+    }
+
+    // Jualan app biasa — kredit komisen kepada perujuk
+    const { data: parent } = await supabase
+      .from("parents").select("referred_by").eq("id", parentId).maybeSingle();
+    const ref = parent?.referred_by;
+    if (!ref) return;
+
+    const { data: aff } = await supabase
+      .from("affiliates").select("parent_id").eq("code", ref).eq("status", "active").maybeSingle();
+    if (!aff || aff.parent_id === parentId) return; // tiada perujuk sah / rujuk diri sendiri
+
+    const availableAt = new Date(Date.now() + HOLD_DAYS * 86400000).toISOString();
+    const { error } = await supabase.from("commissions").insert({
+      affiliate_id: aff.parent_id,
+      referred_parent_id: parentId,
+      amount_sen: COMMISSION_SEN,
+      status: "pending",
+      available_at: availableAt,
+    });
+    // unique(referred_parent_id) — jika sudah dikredit, insert gagal senyap
+    if (error && !/(duplicate|unique)/i.test(error.message)) {
+      console.error("Gagal kredit komisen:", error);
+    } else if (!error) {
+      console.log("Komisen RM15 dikreditkan kepada", aff.parent_id, "untuk pelanggan", parentId);
+    }
+  } catch (e) {
+    console.error("handleAffiliate error:", e);
+  }
+}
+
+async function genAffiliateCode(supabase: SupabaseClient): Promise<string> {
+  const abc = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  for (let a = 0; a < 12; a++) {
+    let c = "";
+    for (let i = 0; i < 6; i++) c += abc[Math.floor(Math.random() * abc.length)];
+    const { data } = await supabase.from("affiliates").select("code").eq("code", c).maybeSingle();
+    if (!data) return c;
+  }
+  return "MM" + Date.now().toString(36).toUpperCase().slice(-4);
 }
 
 async function activateSubscription(
@@ -190,7 +259,7 @@ async function activateSubscription(
     parent_id: parentId,
     chip_purchase_id: chipPurchaseId,
     plan: "lifetime",
-    amount: 2900,
+    amount: 3500,
     status: "paid",
     paid_at: new Date().toISOString(),
   }, { onConflict: "chip_purchase_id" });

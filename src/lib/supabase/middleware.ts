@@ -34,7 +34,9 @@ export async function updateSession(request: NextRequest) {
   // Protect dashboard and play routes
   if (
     !user &&
-    (pathname.startsWith("/dashboard") || pathname.startsWith("/play"))
+    (pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/play") ||
+      pathname.startsWith("/affiliate"))
   ) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }

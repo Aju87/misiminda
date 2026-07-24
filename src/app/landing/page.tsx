@@ -140,7 +140,7 @@ const TESTIMONIALS = [
 const FAQS = [
   {
     q: "Berapa lama akses ini?",
-    a: "Seumur hidup. Bayar RM29 sekali sahaja — tiada langganan bulanan, tiada bayaran tersembunyi, termasuk semua kemaskini akan datang.",
+    a: "Seumur hidup. Bayar RM35 sekali sahaja — tiada langganan bulanan, tiada bayaran tersembunyi, termasuk semua kemaskini akan datang.",
   },
   {
     q: "Sesuai untuk umur berapa?",
@@ -475,7 +475,7 @@ export default function LandingPage() {
               <span className="line-through decoration-[#ff2f7d] decoration-4 text-[#2b2140] font-extrabold text-2xl">RM639</span>
             </p>
             <p className="mt-2 font-extrabold text-2xl md:text-3xl">
-              Hari ini anda hanya bayar <span className="text-[#ff2f7d]">RM29 sahaja</span> — sekali, untuk selamanya. 🤯
+              Hari ini anda hanya bayar <span className="text-[#ff2f7d]">RM35 sahaja</span> — sekali, untuk selamanya. 🤯
             </p>
           </motion.div>
         </div>
@@ -526,7 +526,7 @@ export default function LandingPage() {
 
           <div className="grid sm:grid-cols-3 gap-8">
             {[
-              { step: "1", emoji: "💳", title: "Bayar RM29 — sekali sahaja", desc: "FPX atau kad. Akaun terus aktif, tiada langganan bulanan." },
+              { step: "1", emoji: "💳", title: "Bayar RM35 — sekali sahaja", desc: "FPX atau kad. Akaun terus aktif, tiada langganan bulanan." },
               { step: "2", emoji: "👧", title: "Tetapkan profil anak", desc: "Pilih umur anak — app terus susun misi & latihan ikut tahap dia." },
               { step: "3", emoji: "🏆", title: "Anak main, anda pantau", desc: "Anak kumpul bintang, anda tengok markah naik minggu demi minggu." },
             ].map((s, i) => (
@@ -575,7 +575,7 @@ export default function LandingPage() {
               <p className="font-bold text-[#9c8aa5]">
                 Nilai sebenar: <span className="line-through decoration-[#ff2f7d] decoration-[3px]">RM639</span>
               </p>
-              <p className="text-7xl md:text-8xl font-extrabold text-[#ff2f7d] leading-none mt-2">RM29</p>
+              <p className="text-7xl md:text-8xl font-extrabold text-[#ff2f7d] leading-none mt-2">RM35</p>
               <p className="font-extrabold text-lg mt-2">Bayar sekali · Guna selamanya · Tiada yuran bulanan</p>
             </div>
 
@@ -659,7 +659,7 @@ export default function LandingPage() {
               Setiap hari anak tunggu, makin jauh dia tertinggal.
             </h2>
             <p className="mt-4 text-xl font-bold text-white/90">
-              RM29 hari ini boleh ubah cara anak anda tengok matematik — selamanya.
+              RM35 hari ini boleh ubah cara anak anda tengok matematik — selamanya.
             </p>
             <div className="mt-9">
               <Link

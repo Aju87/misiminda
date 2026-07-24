@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -15,11 +15,12 @@ import { AddKidModal } from "@/components/dashboard/AddKidModal";
 import { RewardCard } from "@/components/dashboard/RewardCard";
 import { AddRewardModal } from "@/components/dashboard/AddRewardModal";
 import { AdsSettings } from "@/components/dashboard/AdsSettings";
+import { AdminAffiliate } from "@/components/dashboard/AdminAffiliate";
 import { Button, Card, Badge, Logo } from "@/components/ui";
 import { ADMIN_EMAIL } from "@/lib/constants";
 import type { Kid } from "@/types";
 
-type Tab = "kids" | "rewards" | "subscription" | "ads";
+type Tab = "kids" | "rewards" | "subscription" | "ads" | "affiliate-admin";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -30,6 +31,11 @@ export default function DashboardPage() {
   const [tab, setTab] = useState<Tab>("kids");
   const [addKidOpen, setAddKidOpen] = useState(false);
   const [addRewardOpen, setAddRewardOpen] = useState(false);
+
+  // Kaitkan rujukan affiliate (jika ada cookie mm_ref) — idempoten
+  useEffect(() => {
+    fetch("/api/affiliate/attribute", { method: "POST" }).catch(() => {});
+  }, []);
 
   if (authLoading) {
     return (
@@ -58,7 +64,7 @@ export default function DashboardPage() {
   const isSubscribed = parent.subscription_status === "active";
   const isAdmin = parent.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
   const tabs: Tab[] = isAdmin
-    ? ["kids", "rewards", "subscription", "ads"]
+    ? ["kids", "rewards", "subscription", "ads", "affiliate-admin"]
     : ["kids", "rewards", "subscription"];
 
   async function handleSignOut() {
@@ -76,6 +82,9 @@ export default function DashboardPage() {
           </Link>
           <div className="flex items-center gap-3">
             <span className="font-bold text-sm hidden sm:block">Hai, {parent.name}!</span>
+            <Link href="/affiliate">
+              <Button variant="mint" size="sm">🤝 Affiliate</Button>
+            </Link>
             <Button variant="secondary" size="sm" onClick={handleSignOut}>Keluar</Button>
           </div>
         </div>
@@ -128,7 +137,7 @@ export default function DashboardPage() {
           style={{ boxShadow: "4px 4px 0px 0px rgba(0,0,0,1)" }}
         >
           {tabs.map((t) => {
-            const labels = { kids: "👧 Kanak-Kanak", rewards: "🎁 Hadiah", subscription: "💳 Langganan", ads: "📢 Ads" };
+            const labels = { kids: "👧 Kanak-Kanak", rewards: "🎁 Hadiah", subscription: "💳 Langganan", ads: "📢 Ads", "affiliate-admin": "🤝 Affiliate" };
             return (
               <button
                 key={t}
@@ -270,6 +279,7 @@ export default function DashboardPage() {
         )}
         {/* Ads tab (admin sahaja) */}
         {tab === "ads" && isAdmin && <AdsSettings />}
+        {tab === "affiliate-admin" && isAdmin && <AdminAffiliate />}
       </main>
 
       <AddKidModal open={addKidOpen} onClose={() => setAddKidOpen(false)} onAdd={addKid} />

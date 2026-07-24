@@ -55,7 +55,7 @@ export async function POST(req: Request) {
           eventSourceUrl: sourceUrl,
           actionSource: "website",
           user: { email, externalId: user.id, fbp, fbc, clientIp: ip, clientUserAgent: userAgent },
-          customData: { currency: "MYR", value: 29, content_name: "MisiMinda Seumur Hidup", content_ids: ["lifetime"], content_type: "product" },
+          customData: { currency: "MYR", value: 35, content_name: "MisiMinda Seumur Hidup", content_ids: ["lifetime"], content_type: "product" },
         }
       ),
       sendTikTokEvent(
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
           eventId,
           pageUrl: sourceUrl,
           user: { email, externalId: user.id, ttclid, ttp, ip, userAgent },
-          properties: { currency: "MYR", value: 29, contents: [{ content_id: "lifetime", content_name: "MisiMinda Seumur Hidup" }] },
+          properties: { currency: "MYR", value: 35, contents: [{ content_id: "lifetime", content_name: "MisiMinda Seumur Hidup" }] },
         }
       ),
     ]);

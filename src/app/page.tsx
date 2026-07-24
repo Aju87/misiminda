@@ -190,7 +190,7 @@ export default function HomePage() {
         <Card color="yellow" className="flex flex-col items-center text-center gap-3 py-12">
           <Badge variant="black">BAYAR SEKALI · GUNA SELAMANYA</Badge>
           <h2 className="text-4xl font-black uppercase">Mulakan Hari Ini</h2>
-          <p className="text-6xl font-black leading-none">RM29</p>
+          <p className="text-6xl font-black leading-none">RM35</p>
           <p className="font-bold">
             Sekali bayar sahaja — tiada yuran bulanan, tiada bayaran tersembunyi.
           </p>

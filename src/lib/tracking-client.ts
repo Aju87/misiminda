@@ -46,8 +46,8 @@ export async function trackInitiateCheckout() {
 
   // 1) Event browser (dedup guna eventID yang sama)
   try {
-    window.fbq?.("track", "InitiateCheckout", { currency: "MYR", value: 29 }, { eventID: eventId });
-    window.ttq?.track("InitiateCheckout", { currency: "MYR", value: 29 }, { event_id: eventId });
+    window.fbq?.("track", "InitiateCheckout", { currency: "MYR", value: 35 }, { eventID: eventId });
+    window.ttq?.track("InitiateCheckout", { currency: "MYR", value: 35 }, { event_id: eventId });
   } catch { /* abaikan */ }
 
   // 2) Event server + simpan atribusi (penting untuk Purchase nanti)

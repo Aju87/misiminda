@@ -5,7 +5,7 @@ import { serviceClient } from "@/lib/ad-settings";
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "hnrichhq@gmail.com";
 
 /** Boleh dibaca umum (pixel ID bukan rahsia — ia terdedah dalam kod browser). */
-const PUBLIC_KEYS = ["meta_pixel_id", "tiktok_pixel_id"];
+const PUBLIC_KEYS = ["meta_pixel_id", "tiktok_pixel_id", "chip_app_url", "chip_affiliate_url"];
 /** RAHSIA — disimpan dalam secure_settings, tidak pernah dihantar balik ke browser. */
 const SECRET_KEYS = ["meta_access_token", "meta_test_event_code", "tiktok_access_token"];
 
@@ -38,6 +38,8 @@ export async function GET() {
   return NextResponse.json({
     meta_pixel_id: pubMap.meta_pixel_id ?? "",
     tiktok_pixel_id: pubMap.tiktok_pixel_id ?? "",
+    chip_app_url: pubMap.chip_app_url ?? "",
+    chip_affiliate_url: pubMap.chip_affiliate_url ?? "",
     // hanya status, bukan nilai sebenar
     meta_access_token: mask(secMap.meta_access_token ?? ""),
     meta_test_event_code: mask(secMap.meta_test_event_code ?? ""),

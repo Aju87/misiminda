@@ -27,7 +27,7 @@ export async function POST(req: Request) {
           actionSource: "website",
           eventSourceUrl: "https://misiminda.my/pricing",
           user: { email: user.email ?? undefined, externalId: user.id, clientIp: ip, clientUserAgent: userAgent },
-          customData: { currency: "MYR", value: 29, content_name: "UJIAN — MisiMinda", content_ids: ["lifetime"], content_type: "product" },
+          customData: { currency: "MYR", value: 35, content_name: "UJIAN — MisiMinda", content_ids: ["lifetime"], content_type: "product" },
         }
       )
     : { ok: false, status: 0, body: "Pixel ID atau access token Meta belum diisi." };
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
           eventId,
           pageUrl: "https://misiminda.my/pricing",
           user: { email: user.email ?? undefined, externalId: user.id, ip, userAgent },
-          properties: { currency: "MYR", value: 29, contents: [{ content_id: "lifetime", content_name: "UJIAN" }] },
+          properties: { currency: "MYR", value: 35, contents: [{ content_id: "lifetime", content_name: "UJIAN" }] },
         }
       )
     : { ok: false, status: 0, body: "Pixel ID atau access token TikTok belum diisi." };

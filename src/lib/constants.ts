@@ -2,8 +2,8 @@ export const SUBSCRIPTION_PLANS = {
   lifetime: {
     id: "lifetime",
     name: "Seumur Hidup",
-    price: 2900, // in sen (RM29.00)
-    displayPrice: "RM29.00",
+    price: 3500, // in sen (RM35.00)
+    displayPrice: "RM35.00",
     badge: "Bayar Sekali, Guna Selamanya",
     features: [
       "Akses semua 3 peringkat umur",

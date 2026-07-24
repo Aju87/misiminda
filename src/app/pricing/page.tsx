@@ -1,12 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { createClient } from "@/lib/supabase/client";
 import { Button, Card, Badge, Logo } from "@/components/ui";
 import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { trackInitiateCheckout } from "@/lib/tracking-client";
+
+const FALLBACK_CHIP_URL = "https://pay.chip-in.asia/misiminda";
 
 export default function PricingPage() {
   const router = useRouter();
@@ -15,7 +19,20 @@ export default function PricingPage() {
   const plan = SUBSCRIPTION_PLANS.lifetime;
   const isSubscribed = parent?.subscription_status === "active";
 
-  const CHIP_PAYMENT_URL = "https://pay.chip-in.asia/misiminda";
+  // URL pembayaran app boleh diubah dari dashboard admin (site_settings.chip_app_url)
+  const [chipUrl, setChipUrl] = useState(FALLBACK_CHIP_URL);
+  useEffect(() => {
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from("site_settings").select("value").eq("key", "chip_app_url").maybeSingle();
+        if (data?.value) setChipUrl(data.value);
+      } catch { /* guna fallback */ }
+    })();
+    // kaitkan rujukan affiliate sebelum pembelian (jika log masuk)
+    fetch("/api/affiliate/attribute", { method: "POST" }).catch(() => {});
+  }, []);
 
   async function handleSubscribe() {
     if (!user) {
@@ -32,7 +49,7 @@ export default function PricingPage() {
       ]);
     } catch { /* jangan halang pembelian */ }
 
-    window.location.href = CHIP_PAYMENT_URL;
+    window.location.href = chipUrl;
   }
 
   return (
