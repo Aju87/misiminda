@@ -216,6 +216,24 @@ export default function HomePage() {
         </Card>
       </section>
 
+      {/* ===== PROGRAM AFFILIATE ===== */}
+      <section className="max-w-3xl mx-auto px-4 pb-12">
+        <Card color="mint" className="flex flex-col items-center text-center gap-3 py-10">
+          <Badge variant="black">🤝 PELUANG PENDAPATAN</Badge>
+          <h2 className="text-3xl font-black uppercase">Jadi Affiliate, Jana Pendapatan</h2>
+          <p className="font-bold max-w-lg">
+            Sertai dengan <strong>RM50</strong> — dapat app penuh untuk anak anda,
+            <strong> dan</strong> raih <strong>RM15 komisen</strong> setiap jualan melalui link anda.
+          </p>
+          <div className="bg-white border-3 border-black rounded-xl px-5 py-2 font-black text-sm">
+            10 jualan = RM150 · 50 jualan = RM750 🚀
+          </div>
+          <Link href="/affiliate">
+            <Button variant="secondary" size="lg">Ketahui Lebih Lanjut →</Button>
+          </Link>
+        </Card>
+      </section>
+
       {/* Footer */}
       <footer className="border-t-4 border-black bg-black text-white py-8">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
