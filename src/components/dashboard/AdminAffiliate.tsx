@@ -20,6 +20,9 @@ export function AdminAffiliate() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  const [makeEmail, setMakeEmail] = useState("");
+  const [making, setMaking] = useState(false);
+  const [makeMsg, setMakeMsg] = useState<{ t: "ok" | "err"; m: string } | null>(null);
 
   async function load() {
     try {
@@ -44,6 +47,21 @@ export function AdminAffiliate() {
       body: JSON.stringify({ chip_app_url: appUrl, chip_affiliate_url: affUrl }),
     });
     setMsg(res.ok ? "✅ Link pembayaran disimpan." : "❌ Gagal simpan link.");
+  }
+
+  async function makeAffiliate() {
+    setMaking(true); setMakeMsg(null);
+    try {
+      const res = await fetch("/api/admin/make-affiliate", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: makeEmail }),
+      });
+      const d = await res.json();
+      if (!res.ok) setMakeMsg({ t: "err", m: d.error ?? "Gagal." });
+      else if (d.alreadyAffiliate) setMakeMsg({ t: "ok", m: `ℹ️ ${d.email} sudah affiliate (kod: ${d.code}).` });
+      else setMakeMsg({ t: "ok", m: `✅ ${d.email} kini affiliate! Kod: ${d.code}` });
+      if (res.ok) setMakeEmail("");
+    } finally { setMaking(false); }
   }
 
   async function act(id: string, action: "paid" | "rejected") {
@@ -81,6 +99,32 @@ export function AdminAffiliate() {
         <div className="flex items-center gap-3">
           <Button onClick={saveUrls} variant="mint" size="sm">💾 Simpan Link</Button>
           {msg && <span className="font-bold text-sm">{msg}</span>}
+        </div>
+      </Card>
+
+      {/* Aktifkan affiliate secara manual */}
+      <Card color="white" className="flex flex-col gap-3">
+        <h3 className="font-black text-lg uppercase">➕ Aktifkan Affiliate Manual</h3>
+        <p className="text-sm font-semibold text-gray-600">
+          Guna jika seseorang sudah bayar RM50 tetapi status affiliate belum aktif automatik.
+          Masukkan email akaun mereka (mereka mesti sudah daftar dahulu).
+        </p>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Input
+            label="Email Pengguna"
+            value={makeEmail}
+            onChange={(e) => setMakeEmail(e.target.value)}
+            placeholder="cth: pengguna@gmail.com"
+            className="flex-1"
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <Button onClick={makeAffiliate} loading={making} size="sm">🤝 Jadikan Affiliate</Button>
+          {makeMsg && (
+            <span className={`font-bold text-sm ${makeMsg.t === "ok" ? "text-green-700" : "text-red-600"}`}>
+              {makeMsg.m}
+            </span>
+          )}
         </div>
       </Card>
 
