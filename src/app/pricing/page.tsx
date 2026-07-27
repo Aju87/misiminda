@@ -79,12 +79,13 @@ export default function PricingPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center flex flex-col gap-4"
         >
-          <Badge variant="mint">💳 Harga</Badge>
+          <Badge variant="mint">🤝 Program Affiliate + 💳 Harga</Badge>
           <h1 className="text-5xl font-black uppercase leading-none">
-            Satu Harga.<br />Seumur Hidup.
+            Guna App.<br />Atau <span className="text-[#0f8a2b]">Jana Pendapatan.</span>
           </h1>
           <p className="text-lg font-semibold text-gray-700 max-w-lg">
-            Bayar sekali, akses selamanya. Tiada bayaran bulanan. Tiada kejutan.
+            Sertai sebagai affiliate dan buat duit hanya dengan kongsi link — atau
+            beli app terus untuk anak anda. Pilihan di tangan anda.
           </p>
         </motion.div>
 
@@ -99,13 +100,98 @@ export default function PricingPage() {
           </Card>
         )}
 
-        {/* Main pricing card */}
+        {/* ===== PROGRAM AFFILIATE (DI ATAS) ===== */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
           className="w-full"
         >
+          <div
+            style={{ boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
+            className="border-4 border-black rounded-2xl bg-[#26D182] p-8 relative"
+          >
+            <div className="absolute -top-4 left-8">
+              <Badge variant="black" className="text-sm px-4 py-1.5">🤝 PALING BERBALOI</Badge>
+            </div>
+
+            <div className="pt-2 flex flex-col items-center gap-4 text-center">
+              <p className="font-black text-sm uppercase tracking-widest">Pakej Affiliate</p>
+              <div className="flex items-end justify-center gap-2">
+                <span className="text-7xl font-black leading-none">RM50</span>
+              </div>
+              <p className="font-bold text-lg max-w-xl">
+                Jana pendapatan <strong>hanya dengan kongsi link</strong> —
+                tiada modal stok, tiada hantar barang, tiada risiko.
+                Setiap orang yang beli app melalui link anda ={" "}
+                <span className="bg-black text-white px-2 rounded">RM15</span> masuk poket anda.
+              </p>
+
+              {/* Kelebihan */}
+              <div className="grid sm:grid-cols-2 gap-3 w-full max-w-xl text-left my-1">
+                {[
+                  "✅ Akses penuh app untuk anak anda (nilai RM35)",
+                  "🔗 Link promosi unik anda sendiri",
+                  "💰 Komisen RM15 setiap jualan — tiada had",
+                  "📊 Dashboard jejak jualan masa nyata",
+                  "🏦 Withdraw terus ke akaun bank, setiap 3 hari",
+                  "♾️ Komisen berulang selagi orang beli",
+                ].map((f) => (
+                  <div key={f} className="flex items-start gap-2 bg-white/95 border-2 border-black rounded-lg px-3 py-2">
+                    <span className="font-bold text-sm">{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Contoh pendapatan */}
+              <div className="bg-white border-3 border-black rounded-xl px-5 py-3 font-black text-sm">
+                Kongsi & jual 10 app = <span className="text-[#0f7a5c] text-lg">RM150</span> ·
+                50 app = <span className="text-[#0f7a5c] text-lg">RM750</span> ·
+                100 app = <span className="text-[#0f7a5c] text-lg">RM1,500</span> 🚀
+              </div>
+
+              {/* 3 langkah */}
+              <div className="grid sm:grid-cols-3 gap-3 w-full max-w-xl my-1">
+                {[
+                  { i: "1️⃣", t: "Sertai RM50", d: "Bayar sekali, aktif serta-merta" },
+                  { i: "2️⃣", t: "Kongsi Link", d: "WhatsApp, FB, TikTok, IG" },
+                  { i: "3️⃣", t: "Dapat RM15", d: "Setiap jualan, terus ke bank" },
+                ].map((x) => (
+                  <div key={x.t} className="bg-white/95 border-3 border-black rounded-xl p-3">
+                    <div className="text-2xl">{x.i}</div>
+                    <p className="font-black text-sm mt-1">{x.t}</p>
+                    <p className="text-xs font-semibold text-gray-700">{x.d}</p>
+                  </div>
+                ))}
+              </div>
+
+              <Link href="/affiliate">
+                <Button variant="secondary" size="xl">Sertai Program Affiliate — RM50 →</Button>
+              </Link>
+              <p className="text-xs font-bold text-white/90">
+                🛡️ Withdraw ke akaun bank anda · Komisen dijamin selepas tempoh refund 7 hari
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Pemisah */}
+        <div className="flex items-center gap-4 w-full max-w-md">
+          <div className="flex-1 h-1 bg-black rounded-full" />
+          <span className="font-black text-sm text-gray-600 uppercase">Atau</span>
+          <div className="flex-1 h-1 bg-black rounded-full" />
+        </div>
+
+        {/* ===== HARGA APP RM35 (DI BAWAH) ===== */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.15 }}
+          className="w-full"
+        >
+          <p className="text-center font-bold text-gray-600 mb-3">
+            Cuma nak guna app untuk anak anda? Beli terus:
+          </p>
           <div
             style={{ boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
             className="border-4 border-black rounded-2xl bg-[#FFB800] p-8 relative"
@@ -153,61 +239,6 @@ export default function PricingPage() {
                   <span className="font-bold text-sm">{f}</span>
                 </div>
               ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ===== PROGRAM AFFILIATE ===== */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="w-full"
-        >
-          <div
-            style={{ boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
-            className="border-4 border-black rounded-2xl bg-[#26D182] p-8 relative"
-          >
-            <div className="absolute -top-4 left-8">
-              <Badge variant="black" className="text-sm px-4 py-1.5">🤝 PELUANG PENDAPATAN</Badge>
-            </div>
-
-            <div className="pt-2 text-center flex flex-col items-center gap-3">
-              <h2 className="text-3xl font-black uppercase">Jadi Affiliate MisiMinda</h2>
-              <p className="font-bold text-lg max-w-xl">
-                Bayar sekali <span className="bg-black text-white px-2 rounded">RM50</span> —
-                dapat <strong>akses penuh app</strong> untuk anak anda,
-                <strong> DAN</strong> jana komisen <strong>RM15</strong> setiap kali seseorang
-                beli app melalui link anda!
-              </p>
-
-              {/* Contoh pengiraan */}
-              <div className="bg-white border-3 border-black rounded-xl px-5 py-3 font-black text-sm">
-                Jual 10 app = <span className="text-[#0f7a5c] text-lg">RM150</span> komisen ·
-                Jual 50 = <span className="text-[#0f7a5c] text-lg">RM750</span> 🚀
-              </div>
-
-              {/* 3 langkah */}
-              <div className="grid sm:grid-cols-3 gap-3 w-full max-w-xl my-2">
-                {[
-                  { i: "1️⃣", t: "Sertai RM50", d: "Bayar sekali, aktif terus" },
-                  { i: "2️⃣", t: "Kongsi Link", d: "WhatsApp, FB, TikTok" },
-                  { i: "3️⃣", t: "Dapat RM15", d: "Setiap jualan, withdraw 3 hari" },
-                ].map((x) => (
-                  <div key={x.t} className="bg-white/95 border-3 border-black rounded-xl p-3">
-                    <div className="text-2xl">{x.i}</div>
-                    <p className="font-black text-sm mt-1">{x.t}</p>
-                    <p className="text-xs font-semibold text-gray-700">{x.d}</p>
-                  </div>
-                ))}
-              </div>
-
-              <Link href="/affiliate">
-                <Button variant="secondary" size="xl">Sertai Program Affiliate →</Button>
-              </Link>
-              <p className="text-xs font-bold text-white/90">
-                🛡️ Withdraw ke akaun bank anda · Komisen dijamin selepas tempoh refund 7 hari
-              </p>
             </div>
           </div>
         </motion.div>
