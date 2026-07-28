@@ -54,7 +54,9 @@ export function CategorySelector({ kid, levels, getProgress, onSelectLevel, onBa
       <div className="flex-1 px-4 py-6 max-w-xl mx-auto w-full flex flex-col gap-6">
         <div className="text-center">
           <h1 className="font-black text-2xl uppercase">Pilih Kategori</h1>
-          <p className="font-semibold text-gray-600 text-sm mt-1">Setiap level ada 10 soalan</p>
+          <p className="font-semibold text-gray-600 text-sm mt-1">
+            Setiap level ada 10 soalan · dapat <strong>10/10</strong> untuk buka level seterusnya 🔓
+          </p>
         </div>
 
         {Object.entries(byCategory).map(([cat, catLevels], gi) => {
@@ -78,32 +80,40 @@ export function CategorySelector({ kid, levels, getProgress, onSelectLevel, onBa
                   const prog = getProgress(level.id);
                   const stars = prog?.stars_earned ?? 0;
                   const done = prog?.completed ?? false;
+                  // Level dikunci sehingga level sebelumnya dalam kategori ini "selesai" (10/10)
+                  const prevLevel = i > 0 ? catLevels[i - 1] : null;
+                  const prevDone = prevLevel ? getProgress(prevLevel.id)?.completed ?? false : true;
+                  const locked = i > 0 && !prevDone;
 
                   return (
                     <motion.button
                       key={level.id}
-                      onClick={() => onSelectLevel(level)}
+                      onClick={() => !locked && onSelectLevel(level)}
+                      disabled={locked}
                       style={{
                         backgroundColor: done ? meta.bg : "#fff",
-                        boxShadow: "4px 4px 0px 0px rgba(0,0,0,1)",
-                        borderColor: done ? meta.color : "#000",
+                        boxShadow: locked ? "none" : "4px 4px 0px 0px rgba(0,0,0,1)",
+                        borderColor: locked ? "#ccc" : done ? meta.color : "#000",
+                        opacity: locked ? 0.55 : 1,
                       }}
-                      className="border-4 rounded-xl p-4 text-left hover:translate-x-[2px] hover:translate-y-[2px] transition-transform w-full"
-                      whileTap={{ scale: 0.97 }}
+                      className="border-4 rounded-xl p-4 text-left hover:translate-x-[2px] hover:translate-y-[2px] transition-transform w-full disabled:cursor-not-allowed"
+                      whileTap={locked ? {} : { scale: 0.97 }}
                     >
                       <div className="flex items-center gap-3">
                         <div
-                          style={{ backgroundColor: meta.color }}
+                          style={{ backgroundColor: locked ? "#9ca3af" : meta.color }}
                           className="w-10 h-10 rounded-xl border-2 border-black flex items-center justify-center font-black text-white text-sm shrink-0"
                         >
-                          L{level.level_number}
+                          {locked ? "🔒" : done ? "✓" : `L${level.level_number}`}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-black text-sm uppercase truncate">{level.theme}</p>
                           <p className="text-xs font-semibold text-gray-600 mt-0.5">{level.description}</p>
                         </div>
                         <div className="flex flex-col items-end gap-1 shrink-0">
-                          {done ? (
+                          {locked ? (
+                            <span className="text-xs font-black text-gray-500 bg-gray-100 border border-gray-300 rounded-lg px-2 py-0.5">Kunci 🔒</span>
+                          ) : done ? (
                             <span className="text-xs font-black text-green-700 bg-green-100 border border-green-400 rounded-lg px-2 py-0.5">Selesai ✓</span>
                           ) : (
                             <span className="text-xs font-black text-gray-500 bg-gray-100 border border-gray-300 rounded-lg px-2 py-0.5">Belum Cuba</span>

@@ -132,7 +132,10 @@ function PlayContent() {
       const pct = newCorrect / total;
       const stars = pct === 1 ? 10 : pct >= 0.7 ? 7 : pct >= 0.5 ? 5 : 3;
 
-      saveProgress(selectedLevel!.id, stars, pct >= 0.7);
+      // Latihan Pantas: mesti 10/10 (100%) untuk buka level seterusnya.
+      // Track lain: 70% memadai.
+      const pass = quizMode === "latihan" ? pct === 1 : pct >= 0.7;
+      saveProgress(selectedLevel!.id, stars, pass);
       setCorrectCount(newCorrect);
       setScreen("result");
     } else {
@@ -159,17 +162,21 @@ function PlayContent() {
     );
   }
 
-  // Level dalam modul semasa (untuk prasekolah, tapis ikut modul terpilih)
+  // Kumpulan level untuk "level seterusnya":
+  //  - prasekolah → ikut modul terpilih
+  //  - latihan    → ikut kategori level semasa (darab/tambah/bahagi berasingan)
+  //  - lain       → semua level
   const moduleLevels =
     quizMode === "prasekolah" && selectedModule
       ? levels.filter((l) => l.category === selectedModule)
+      : quizMode === "latihan" && selectedLevel
+      ? levels.filter((l) => l.category === selectedLevel.category)
       : levels;
 
   async function handleNextLevel() {
     if (!selectedLevel) return;
-    const pool = quizMode === "prasekolah" ? moduleLevels : levels;
-    const currentIdx = pool.findIndex((l) => l.id === selectedLevel.id);
-    const next = pool[currentIdx + 1];
+    const currentIdx = moduleLevels.findIndex((l) => l.id === selectedLevel.id);
+    const next = moduleLevels[currentIdx + 1];
     if (!next) return;
     await handleSelectLevel(next);
   }
@@ -177,6 +184,8 @@ function PlayContent() {
   // Calculate stars for result
   const pct = questions.length > 0 ? correctCount / questions.length : 0;
   const starsEarned = pct === 1 ? 10 : pct >= 0.7 ? 7 : pct >= 0.5 ? 5 : 3;
+  // Lulus (buka level seterusnya): latihan perlu 100%, lain 70%
+  const passed = quizMode === "latihan" ? pct === 1 : pct >= 0.7;
   const nextLevel = selectedLevel
     ? moduleLevels[moduleLevels.findIndex((l) => l.id === selectedLevel.id) + 1]
     : undefined;
@@ -425,6 +434,7 @@ function PlayContent() {
             total={questions.length}
             starsEarned={starsEarned}
             nextLevel={nextLevel}
+            passed={passed}
             onPlayAgain={handlePlayAgain}
             onNextLevel={handleNextLevel}
             onBackToMap={handleBackToMap}

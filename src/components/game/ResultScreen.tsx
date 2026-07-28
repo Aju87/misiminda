@@ -12,6 +12,8 @@ interface ResultScreenProps {
   total: number;
   starsEarned: number;
   nextLevel?: Level;
+  /** Adakah lulus untuk buka level seterusnya? Default: 70%. */
+  passed?: boolean;
   onPlayAgain: () => void;
   onNextLevel?: () => void;
   onBackToMap: () => void;
@@ -61,12 +63,15 @@ export function ResultScreen({
   total,
   starsEarned,
   nextLevel,
+  passed,
   onPlayAgain,
   onNextLevel,
   onBackToMap,
 }: ResultScreenProps) {
   const isPerfect = correct === total;
   const percentage = Math.round((correct / total) * 100);
+  // jika prop `passed` diberi, guna itu; jika tidak, fallback ke 70%
+  const didPass = passed ?? percentage >= 70;
   const confettiShown = useRef(false);
 
   useEffect(() => {
@@ -100,9 +105,16 @@ export function ResultScreen({
             </motion.div>
 
             <h1 className="font-black text-3xl uppercase mb-1">
-              {isPerfect ? "Sempurna!" : percentage >= 70 ? "Hebat!" : "Cuba Lagi!"}
+              {isPerfect ? "Sempurna!" : percentage >= 70 ? "Hampir!" : "Cuba Lagi!"}
             </h1>
-            <p className="font-semibold text-gray-700 mb-6">{level.theme}</p>
+            <p className="font-semibold text-gray-700 mb-2">{level.theme}</p>
+            {/* Latihan: perlu 10/10 untuk maju */}
+            {!didPass && nextLevel && percentage >= 70 && (
+              <p className="font-bold text-sm text-[#e8590c] mb-4">
+                Kena dapat semua betul (10/10) untuk buka level seterusnya! 💪
+              </p>
+            )}
+            {(didPass || percentage < 70 || !nextLevel) && <div className="mb-4" />}
 
             {/* Score */}
             <div
@@ -146,12 +158,12 @@ export function ResultScreen({
             transition={{ delay: 0.4 }}
             className="flex flex-col gap-3"
           >
-            {percentage >= 70 && nextLevel && onNextLevel && (
+            {didPass && nextLevel && onNextLevel && (
               <Button fullWidth size="lg" variant="mint" onClick={onNextLevel}>
                 Level {nextLevel.level_number} Seterusnya ➡️
               </Button>
             )}
-            {percentage < 70 && (
+            {!didPass && (
               <Button fullWidth size="lg" variant="primary" onClick={onPlayAgain}>
                 Cuba Semula 🔄
               </Button>
