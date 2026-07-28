@@ -15,6 +15,9 @@ function AuthForm() {
   const [tab, setTab] = useState<Tab>(
     searchParams.get("tab") === "signup" ? "signup" : "login"
   );
+  // ke mana selepas log masuk (cth: /jadi-affiliate). Hanya laluan dalaman.
+  const nextParam = searchParams.get("next");
+  const nextPath = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -25,9 +28,9 @@ function AuthForm() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) router.replace("/dashboard");
+      if (data.user) router.replace(nextPath);
     });
-  }, [router, supabase]);
+  }, [router, supabase, nextPath]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -38,7 +41,7 @@ function AuthForm() {
       setError("E-mel atau kata laluan tidak betul.");
       setLoading(false);
     } else {
-      router.replace("/dashboard");
+      router.replace(nextPath);
     }
   }
 

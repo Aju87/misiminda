@@ -228,7 +228,7 @@ export default function HomePage() {
           <div className="bg-white border-3 border-black rounded-xl px-5 py-2 font-black text-sm">
             10 jualan = RM150 · 50 jualan = RM750 🚀
           </div>
-          <Link href="/affiliate">
+          <Link href="/jadi-affiliate">
             <Button variant="secondary" size="lg">Ketahui Lebih Lanjut →</Button>
           </Link>
         </Card>

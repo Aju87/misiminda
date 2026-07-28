@@ -165,7 +165,7 @@ export default function PricingPage() {
                 ))}
               </div>
 
-              <Link href="/affiliate">
+              <Link href="/jadi-affiliate">
                 <Button variant="secondary" size="xl">Sertai Program Affiliate — RM50 →</Button>
               </Link>
               <p className="text-xs font-bold text-white/90">
