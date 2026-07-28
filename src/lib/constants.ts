@@ -91,6 +91,14 @@ export const PRESCHOOL_MODULES = [
     color: "#9B59B6",
     bg: "#F3E8FF",
   },
+  {
+    id: "kira-menegak",
+    emoji: "🧮",
+    title: "Kira Menegak",
+    desc: "Susun nombor & isi jawapan — belajar tambah sebenar.",
+    color: "#0EA5E9",
+    bg: "#E0F4FF",
+  },
 ] as const;
 
 export const LEVEL_THEMES: Record<string, { color: string; bg: string }> = {

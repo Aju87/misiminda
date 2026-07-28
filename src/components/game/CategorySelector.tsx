@@ -20,6 +20,7 @@ const CATEGORY_META: Record<string, { emoji: string; color: string; bg: string; 
   "masa-ukuran":  { emoji: "⏰", color: "#3498DB", bg: "#E8F2FF", label: "Masa & Ukuran" },
   geometri:       { emoji: "📐", color: "#E67E22", bg: "#FFF0E0", label: "Geometri" },
   data:           { emoji: "📊", color: "#8E44AD", bg: "#F5E8FF", label: "Statistik & Data" },
+  "kira-menegak": { emoji: "🧮", color: "#0EA5E9", bg: "#E0F4FF", label: "Kira Menegak" },
 };
 
 export function CategorySelector({ kid, levels, getProgress, onSelectLevel, onBack }: CategorySelectorProps) {

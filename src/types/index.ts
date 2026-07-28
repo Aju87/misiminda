@@ -24,7 +24,7 @@ export interface Kid {
 export type Subject = "matematik" | "sains";
 export type QuizMode = "misi" | "latihan" | "prasekolah" | "sains";
 export type DrillCategory = "tambah-tolak" | "sifir" | "bahagi" | "pecahan" | "wang" | "masa-ukuran" | "geometri" | "data";
-export type PreschoolModule = "kenal-huruf" | "eja" | "padanan";
+export type PreschoolModule = "kenal-huruf" | "eja" | "padanan" | "kira-menegak";
 
 export interface Level {
   id: string;
@@ -49,7 +49,8 @@ export type QuestionType =
   | "susun"     // susun huruf jadi perkataan (mengeja)
   | "padanan"   // padan sisi A ke B dengan garisan
   | "urutan"    // susun kad mengikut urutan betul (kitaran hidup, proses)
-  | "kategori"; // asingkan item kepada 2 kumpulan
+  | "kategori"  // asingkan item kepada 2 kumpulan
+  | "kira";     // kira menegak — susun & isi jawapan digit demi digit
 
 export interface MatchPair {
   left: string;
@@ -67,13 +68,19 @@ export interface SequenceData {
   steps: string[];
 }
 
+/** Data untuk soalan jenis "kira" — pengiraan menegak. */
+export interface ColumnData {
+  operands: string[];      // cth: ["994", "84"]
+  operator: "+" | "−" | "×";
+}
+
 export interface Question {
   id: string;
   level_id: string;
   story_text: string;
   question_text: string;
   // untuk pilihan/susun: senarai pilihan; untuk padanan: { pairs }
-  options: QuestionOption[] | { pairs: MatchPair[] } | CategoryData | SequenceData;
+  options: QuestionOption[] | { pairs: MatchPair[] } | CategoryData | SequenceData | ColumnData;
   // untuk pilihan/susun: jawapan tunggal; untuk padanan: senarai pasangan betul
   correct_answer: QuestionOption | MatchPair[] | string[];
   success_message: string;

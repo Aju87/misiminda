@@ -17,6 +17,7 @@ import { PreschoolCard } from "@/components/game/PreschoolCard";
 import { MatchingCard } from "@/components/game/MatchingCard";
 import { SequenceCard } from "@/components/game/SequenceCard";
 import { CategorySortCard } from "@/components/game/CategorySortCard";
+import { KiraCard } from "@/components/game/KiraCard";
 import { ResultScreen } from "@/components/game/ResultScreen";
 import type { Kid, Level, Question, QuestionOption, QuizMode, PreschoolModule, Subject } from "@/types";
 
@@ -360,7 +361,15 @@ function PlayContent() {
           ) : (
             <div className="px-4 py-8">
               <AnimatePresence mode="wait">
-                {questions[currentIndex].question_type === "urutan" ? (
+                {questions[currentIndex].question_type === "kira" ? (
+                  <KiraCard
+                    key={`${selectedLevel.id}-${currentIndex}`}
+                    question={questions[currentIndex]}
+                    questionNumber={currentIndex + 1}
+                    totalQuestions={questions.length}
+                    onAnswer={(correct) => handleAnswer(correct, "")}
+                  />
+                ) : questions[currentIndex].question_type === "urutan" ? (
                   <SequenceCard
                     key={`${selectedLevel.id}-${currentIndex}`}
                     question={questions[currentIndex]}
